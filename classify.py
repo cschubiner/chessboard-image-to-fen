@@ -6,6 +6,7 @@ import pandas as pd
 
 training_directories = ['front', 'back', '7']
 training_directories = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
+training_directories = ['clay', 'garrett']
 file_names = [(dir_name, ['images/' + dir_name + '/' + str(x) for x in os.listdir('images/' + dir_name) if x.endswith('.jpg')]) for dir_name in training_directories]
 file_names_zipped_with_label = [list(zip(front_images, [dir_name for x in front_images])) for dir_name, front_images in file_names]
 
@@ -35,3 +36,6 @@ clf = linear_model.LogisticRegressionCV(
 clf.fit(X_train, y_train)
 print('train score:', clf.score(X_train, y_train))
 print('val score:', clf.score(X_val, y_val))
+
+# toclassify = clf.predict(image_features(['toclassify.jpg']))
+# print('toclassify', toclassify)
