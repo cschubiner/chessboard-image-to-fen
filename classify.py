@@ -19,10 +19,9 @@ d = list(front_x) + list(back_x)
 # print(d)
 
 df = pd.DataFrame(data=ret)
-print(df)
 df = df.rename(columns={0: "image_name", 1: "is_front"})
+df = df.sample(frac=1).reset_index(drop=True) # shuffle rows
 print(df)
-
 
 img_paths = list(df['image_name'])
 is_front = list(df['is_front'])
