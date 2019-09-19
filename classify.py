@@ -4,7 +4,7 @@ from image_features import image_features
 import numpy as np
 import pandas as pd
 
-training_directories = ['front', 'back']
+training_directories = ['front', 'back', '7']
 file_names = [(dir_name, ['images/' + dir_name + '/' + str(x) for x in os.listdir('images/' + dir_name)]) for dir_name in training_directories]
 front_images = ['images/front/' + str(x) for x in os.listdir('images/front')]
 back_images = ['images/back/' + str(x) for x in os.listdir('images/back')]
