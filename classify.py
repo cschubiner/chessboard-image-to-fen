@@ -20,13 +20,16 @@ print(df)
 img_paths = list(df['image_name'])
 label = list(df['label'])
 
+X_full = image_features(img_paths, progress=True)
+y_full = label
+
 n = round(0.8 * len(img_paths))
 # n = round(0.1 * len(img_paths))
-X_train = image_features(img_paths[:n], progress=True)
-y_train = label[:n]
+X_train = X_full[:n]
+y_train = y_full[:n]
 
-X_val = image_features(img_paths[n:], progress=True)
-y_val = label[n:]
+X_val = X_full[n:]
+y_val = y_full[n:]
 
 
 from sklearn import linear_model
@@ -36,6 +39,11 @@ clf = linear_model.LogisticRegressionCV(
     class_weight='balanced'
 )
 clf.fit(X_train, y_train)
+print('train score:', clf.score(X_train, y_train))
+print('val score:', clf.score(X_val, y_val))
+
+from joblib import dump, load
+dump(clf, 'clf.joblib')
 print('train score:', clf.score(X_train, y_train))
 print('val score:', clf.score(X_val, y_val))
 
