@@ -2,24 +2,24 @@ labeled_boards = {
 "board_1457.jpg": """
 """,
 "board_1344.jpg": """
-RNBQKBNR
-PPPPPPPP
+bRbNbBbQbKbBbNbR
+bPbPbPbPbPbPbPbP
 
 
----PP---
---N--N--
-PPP--PPP
-R-BQKB-R
+------wPwP------
+----wN----wN----
+wPwPwP----wPwPwP
+wR--wBwQwKwB--wR
 """,
 "board_1346.jpg": """
-RNBQKBNR
-PPPPPPPP
+bRbNbBbQbKbBbNbR
+bPbPbPbPbPbPbPbP
 
 
 
 
-PPPPPPPP
-RNBQKBNR
+wPwPwPwPwPwPwPwP
+wRwNwBwQwKwBwNwR
 """,
 "board_1353.jpg": """
 """,
