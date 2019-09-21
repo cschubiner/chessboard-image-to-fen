@@ -4,10 +4,12 @@ from image_features import image_features
 import numpy as np
 import pandas as pd
 
-training_directories = ['front', 'back', '7']
-training_directories = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
-training_directories = ['clay', 'garrett']
-file_names = [(dir_name, ['images/' + dir_name + '/' + str(x) for x in os.listdir('images/' + dir_name) if x.endswith('.jpg')]) for dir_name in training_directories]
+image_dir = 'images_chess_pieces'
+# training_directories = ['front', 'back', '7']
+# training_directories = ['clay', 'garrett']
+training_directories = ['bR', 'bN', 'bB', 'bQ', 'bK', 'bP', 'wP', 'wR', 'wN', 'wB', 'wQ', 'wK', '--']
+
+file_names = [(dir_name, [image_dir + '/' + dir_name + '/' + str(x) for x in os.listdir(image_dir + '/' + dir_name) if x.endswith('.jpg')]) for dir_name in training_directories]
 file_names_zipped_with_label = [list(zip(front_images, [dir_name for x in front_images])) for dir_name, front_images in file_names]
 
 df = pd.DataFrame(data=functools.reduce(lambda x,y: x+y, file_names_zipped_with_label))
