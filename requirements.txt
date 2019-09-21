@@ -1,4 +1,6 @@
 image-features==0.1
 torch
 torchvision
+opencv-python
 pandas
+
