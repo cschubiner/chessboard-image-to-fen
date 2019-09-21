@@ -15,7 +15,7 @@ for fname, board_str in labeled_boards.items():
       board.append(['-'] * 8)
     else:
       row = []
-      for c in line:
+      for c in line.upper():
         row.append(c)
       assert len(row) == 8
       board.append(row)
@@ -26,7 +26,12 @@ for fname, board_str in labeled_boards.items():
   import cv2
 
   img = cv2.imread('clayboards_out/' + fname)
+  square_size = 150
   for r in range(0,img.shape[0],150):
-      for c in range(0,img.shape[1],150):
-          cv2.imwrite(f"{fname}_{r}_{c}.jpg",img[r:r+150, c:c+150,:])
+    i = r//square_size
+    for c in range(0,img.shape[1],150):
+      j = c//square_size
+      piece = board[i][j]
+      cv2.imwrite(f"{piece}_{fname}_{r}_{c}.jpg",img[r:r+square_size, c:c+square_size,:])
+      # exit()
 
