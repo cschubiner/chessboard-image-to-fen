@@ -21,6 +21,7 @@ for fname, board_str in labeled_boards.items():
       row = []
       for c in chunks(line, 2):
         c = c[0].lower() + c[1].upper()
+        print(fname, c, len(board))
         assert c in ['bR', 'bN', 'bB', 'bQ', 'bK', 'bP', 'wP', 'wR', 'wN', 'wB', 'wQ', 'wK', '--']
         row.append(c)
       assert len(row) == 8
