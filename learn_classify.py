@@ -3,6 +3,7 @@ import os
 from image_features import image_features
 import numpy as np
 import pandas as pd
+from joblib import dump, load
 
 image_dir = 'images_chess_pieces'
 # training_directories = ['front', 'back', '7']
@@ -42,7 +43,6 @@ clf.fit(X_train, y_train)
 print('train score:', clf.score(X_train, y_train))
 print('val score:', clf.score(X_val, y_val))
 
-from joblib import dump, load
 dump(clf, 'clf.joblib')
 print('train score:', clf.score(X_train, y_train))
 print('val score:', clf.score(X_val, y_val))
