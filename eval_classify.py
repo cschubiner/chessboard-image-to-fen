@@ -14,6 +14,7 @@ pieces_image_dir = 'to_eval_pieces'
 clf = load('clf.joblib')
 
 for fname in board_file_names:
+  print(f"Evaluating {fname}...")
   split_board_image(board_image_dir + '/' + fname, fname, pieces_image_dir)
 
   pieces_file_names = [str(x) for x in os.listdir(pieces_image_dir)]

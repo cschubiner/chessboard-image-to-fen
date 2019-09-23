@@ -2,7 +2,6 @@ import cv2
 
 
 def split_board_image(floc, fname, out_dir, board=None):
-  print(floc, fname)
   img = cv2.imread(floc)
   square_size = 150
   for r in range(0, img.shape[0], 150):
