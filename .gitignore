@@ -1,4 +1,5 @@
 uploads/processed_upload-*
+to_eval_pieces/*.jpg
 images/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
