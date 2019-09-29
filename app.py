@@ -78,7 +78,7 @@ def upload_file():
         result = eval_images([processed_filepath_new])
         board_s = '<br/>'.join(result)
 
-        return html + '<br/>' + board_s + + '<br/><br/><img src=' + processed_file_url + '>'
+        return html + '<br/>' + board_s + '<br/><br/><img src=' + processed_file_url + '>'
     return html
 
 

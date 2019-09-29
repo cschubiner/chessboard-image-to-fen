@@ -2,9 +2,15 @@
 Takes an overhead picture of a chessboard and converts it to FEN notation for engine analysis
 
 # Running server
-psudo() { sudo env PATH="$PATH" "$@"; }
+screen -S chess_flask
 
+conda activate tf-cpu
+psudo() { sudo env PATH="$PATH" "$@"; }
 psudo python3 app.py
+
+screen -S file_checker
+conda activate tf-cpu
+python3 file_checker.py
 
 # commands to setup ec2 instance:
 sudo yum install git -y
