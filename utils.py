@@ -10,8 +10,8 @@ def split_board_image(floc, fname, out_dir, board=None):
       j = c // square_size
       if board:
         piece = board[i][j]
-        out_loc = f"{out_dir}/{piece}/_{fname}_{r}_{c}.jpg"
+        out_loc = str(out_dir) + "/" + str(piece) + "/_" + str(fname) + "_" + str(r) + "_" + str(c) + ".jpg"
       else:
-        out_loc = f"{out_dir}/{i}_{j}.jpg"
+        out_loc = str(out_dir) + "/" + str(i) + "_" + str(j) + ".jpg"
 
       cv2.imwrite(out_loc, img[r:r + square_size, c:c + square_size, :])
