@@ -5,3 +5,4 @@ opencv-python
 pandas
 scikit-learn
 Flask
+Flask-Uploads
