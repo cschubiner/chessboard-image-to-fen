@@ -55,23 +55,30 @@ def wait_for_file():
 def upload_file():
     if request.method == 'POST' and 'photo' in request.files:
         filename = photos.save(request.files['photo'], name='upload-' + str(uuid.uuid1())[:8] + '.')
+
+        # Move upload to neural-chessboard for processing
         os.rename('uploads/' + filename, os.getcwd() + '/../neural-chessboard/uploads/' + filename)
 
         file_url = photos.url(filename)
+
+        # Wait for neural-chessboard to move it to its processed directory
         processed_filepath, processed_filename = wait_for_file()
+
         print('processed_filepath', processed_filepath)
         print('processed_filename', processed_filename)
-        os.rename(processed_filepath, "uploads/" + processed_filename)
 
-        process_fp = photos.save(processed_filepath)
-        processed_file_url = photos.url(process_fp)
+        processed_filepath_new = "uploads/" + processed_filename
+        os.rename(processed_filepath, processed_filepath_new)
+
+        processed_file_url = photos.url(processed_filename)
         print('filename', filename)
         print('file_url', file_url)
         print('processed_file_url', processed_file_url)
-        result = eval_images([processed_filename])
+        print('processed_filepath_new', processed_filepath_new)
+        result = eval_images([processed_filepath_new])
         board_s = '<br/>'.join(result)
 
-        return html + '<br>' + board_s + '<img src=' + processed_file_url + '>'
+        return html + '<br/>' + board_s + + '<br/><br/><img src=' + processed_file_url + '>'
     return html
 
 
