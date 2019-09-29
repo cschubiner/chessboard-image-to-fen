@@ -1,14 +1,24 @@
 # -*- coding: utf-8 -*-
 import os
+import sys
+import subprocess
+# print(os.path.dirname(os.path.realpath(__file__)) + "/../neural-chessboard")
+# sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../neural-chessboard")
+# from neural_chessboard.main import detect
+
+# result = subprocess.run(['python3', 'main.py', 'detect', '--input="clayboards/IMG_1353.jpg"', '--output="clayboards_out/board_1353.jpg"'], capture_output=True, cwd="../neural-chessboard/")
+# print(result)
 
 from flask import Flask, request
+import os, time
 
 
 from eval_classify import eval_images
 from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
 
+
 app = Flask(__name__)
-app.config['UPLOADED_PHOTOS_DEST'] = os.getcwd() + '/uploads'
+app.config['UPLOADED_PHOTOS_DEST'] = os.getcwd() + '/../neural-chessboard/uploads'
 
 photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
@@ -24,24 +34,48 @@ html = '''
     </form>
     '''
 
+def wait_for_file():
+  path_to_watch = os.getcwd() + '/../neural-chessboard/processed'
+  before = dict ([(f, None) for f in os.listdir (path_to_watch)])
+
+  while 1:
+    time.sleep(1)
+    after = dict ([(f, None) for f in os.listdir (path_to_watch)])
+    added = [f for f in after if not f in before]
+
+    if added:
+        if len(added) > 1:
+          print('ADDED MULTIPLE??')
+        print("Added: ", ", ".join (added), '... Processing...')
+        return (path_to_watch + '/' + added[0], added[0])
+
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST' and 'photo' in request.files:
         filename = photos.save(request.files['photo'])
         file_url = photos.url(filename)
-        print(filename, file_url)
-        result = eval_images(['uploads/' + filename])
+        processed_filepath, processed_filename = wait_for_file()
+        os.rename(processed_filepath, "processed/" + processed_filename)
+
+        process_fp = photos.save(processed_filepath)
+        processed_file_url = photos.url(process_fp)
+        print('filename', filename)
+        print('file_url', file_url)
+        print('processed_filename', processed_filename)
+        print('processed_file_url', processed_file_url)
+        result = eval_images([processed_filename])
         board_s = '<br/>'.join(result)
 
-        return html + '<br>' + board_s + '<img src=' + file_url + '>'
+        return html + '<br>' + board_s + '<img src=' + processed_file_url + '>'
     return html
 
 
-@app.route('/chess')
+@app.route('/detect')
 def index():
-    result = eval_images()
-    board_s = '\n'.join(result)
+    board_s = ''
+    # result = eval_images()
+    # board_s = '\n'.join(result)
     return 'Whale, Hello there!3\n' + board_s
 
 @app.route('/')
