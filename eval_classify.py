@@ -35,6 +35,6 @@ for fname in board_file_names:
 
   for i in range(8):
     for j in range(8):
-      key = f"{i}_{j}"
+      key = str(i) + "_" + str(j)
       print(pred_board_dict[key], end = ' ')
     print('')
