@@ -7,17 +7,17 @@ screen -S chess_flask
 screen -x -R chess_flask
 
 cd ~/chessboard-image-to-fen
-git pull
 conda activate tf-cpu
 psudo() { sudo env PATH="$PATH" "$@"; }
+git pull
 psudo python3 app.py
 
 
 
 screen -x -R file_checker
 cd ~/neural-chessboard/
-git pull
 conda activate tf-cpu
+git pull
 python3 file_checker.py
 
 # commands to setup ec2 instance:
