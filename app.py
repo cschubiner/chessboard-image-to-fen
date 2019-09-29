@@ -82,7 +82,7 @@ def upload_file():
         board_s = ''
         print(fen)
         fen_link = '<a href="https://lichess.org/analysis/standard/' + urllib.parse.quote(fen.replace(' ', '_')) + '">Analyze on lichess.com</a><br/>'
-        fen_link += '<iframe style="height:400px;" src="https://lichess.org/analysis/standard/' + urllib.parse.quote(fen.replace(' ', '_')) + '">Analyze on lichess.com</iframe>'
+        fen_link += '<iframe style="height:400px;" src="https://lichess.org/editor?fen=' + urllib.parse.quote(fen.replace(' ', '_')) + '"/>'
 
         print(fen_link)
 
