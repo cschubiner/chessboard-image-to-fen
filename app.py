@@ -2,6 +2,7 @@
 import os
 import sys
 import subprocess
+import uuid
 # print(os.path.dirname(os.path.realpath(__file__)) + "/../neural-chessboard")
 # sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../neural-chessboard")
 # from neural_chessboard.main import detect
@@ -18,7 +19,7 @@ from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_cl
 
 
 app = Flask(__name__)
-app.config['UPLOADED_PHOTOS_DEST'] = os.getcwd() + '/../neural-chessboard/uploads'
+app.config['UPLOADED_PHOTOS_DEST'] = os.getcwd() + '/uploads'
 
 photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
@@ -53,16 +54,19 @@ def wait_for_file():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST' and 'photo' in request.files:
-        filename = photos.save(request.files['photo'])
+        filename = photos.save(request.files['photo'], name='upload-' + str(uuid.uuid1())[:8] + '.')
+        os.rename('uploads/' + filename, os.getcwd() + '/../neural-chessboard/uploads/' + filename)
+
         file_url = photos.url(filename)
         processed_filepath, processed_filename = wait_for_file()
-        os.rename(processed_filepath, "processed/" + processed_filename)
+        print('processed_filepath', processed_filepath)
+        print('processed_filename', processed_filename)
+        os.rename(processed_filepath, "uploads/" + processed_filename)
 
         process_fp = photos.save(processed_filepath)
         processed_file_url = photos.url(process_fp)
         print('filename', filename)
         print('file_url', file_url)
-        print('processed_filename', processed_filename)
         print('processed_file_url', processed_file_url)
         result = eval_images([processed_filename])
         board_s = '<br/>'.join(result)
