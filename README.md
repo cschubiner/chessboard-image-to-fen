@@ -4,15 +4,19 @@ Takes an overhead picture of a chessboard and converts it to FEN notation for en
 # Running server
 screen -S chess_flask
 
-screen -r chess_flask
+screen -x -R chess_flask
 
+cd ~/chessboard-image-to-fen
+git pull
 conda activate tf-cpu
 psudo() { sudo env PATH="$PATH" "$@"; }
 psudo python3 app.py
 
-screen -S file_checker
 
-screen -r file_checker
+
+screen -x -R file_checker
+cd ~/neural-chessboard/
+git pull
 conda activate tf-cpu
 python3 file_checker.py
 
