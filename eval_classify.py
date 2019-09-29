@@ -7,16 +7,19 @@ from image_features import image_features
 from joblib import dump, load
 
 board_image_dir = 'to_eval'
-board_file_names = [str(x) for x in os.listdir(board_image_dir)]
+default_board_file_names = [board_image_dir + '/' + str(x) for x in os.listdir(board_image_dir)]
 
 pieces_image_dir = 'to_eval_pieces'
 
 clf = load('clf.joblib')
 
-def run():
+def eval_images(board_file_names=None):
+  if not board_file_names:
+    board_file_names = default_board_file_names
+
   for fname in board_file_names:
     print("Evaluating " + str(fname) + "...")
-    split_board_image(board_image_dir + '/' + fname, fname, pieces_image_dir)
+    split_board_image(fname, fname, pieces_image_dir)
 
     pieces_file_names = [str(x) for x in os.listdir(pieces_image_dir)]
     pieces_file_locs = [pieces_image_dir + '/' + x for x in pieces_file_names]
@@ -44,6 +47,6 @@ def run():
     return ret
 
 if __name__ == "__main__":
-  result = run()
+  result = eval_images()
   print('\n'.join(result))
 

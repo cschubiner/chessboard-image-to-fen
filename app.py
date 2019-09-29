@@ -4,7 +4,7 @@ import os
 from flask import Flask, request
 
 
-from eval_classify import run
+from eval_classify import eval_images
 from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
 
 app = Flask(__name__)
@@ -30,13 +30,17 @@ def upload_file():
     if request.method == 'POST' and 'photo' in request.files:
         filename = photos.save(request.files['photo'])
         file_url = photos.url(filename)
-        return html + '<br><img src=' + file_url + '>'
+        print(filename, file_url)
+        result = eval_images(['uploads/' + filename])
+        board_s = '<br/>'.join(result)
+
+        return html + '<br>' + board_s + '<img src=' + file_url + '>'
     return html
 
 
 @app.route('/chess')
 def index():
-    result = run()
+    result = eval_images()
     board_s = '\n'.join(result)
     return 'Whale, Hello there!3\n' + board_s
 
