@@ -80,10 +80,12 @@ def upload_file():
         # board_s = '<br/>'.join(' '.join(result))
         board_s = ''
         print(fen)
-        fen_link = '<iframe style="height:400px;" src="https://lichess.org/analysis/standard/' + urllib.parse.quote(fen.replace(' ', '_')) + '">Analyze on lichess.com</iframe>'
+        fen_link = '<a href="https://lichess.org/analysis/standard/' + urllib.parse.quote(fen.replace(' ', '_')) + '">Analyze on lichess.com</a><br/>'
+        fen_link += '<iframe style="height:400px;" src="https://lichess.org/analysis/standard/' + urllib.parse.quote(fen.replace(' ', '_')) + '">Analyze on lichess.com</iframe>'
+
         print(fen_link)
 
-        return html + '<br/>' + fen_link + '<br/>' + board_s + '<br/><br/><img src=' + processed_file_url + '>'
+        return html + '<br/>' + fen_link + '<br/>' + board_s + '<br/><br/><img style="width:350px;" src=' + processed_file_url + '>'
     return html
 
 
