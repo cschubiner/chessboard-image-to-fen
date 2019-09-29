@@ -4,12 +4,6 @@ import os
 import sys
 import subprocess
 import uuid
-# print(os.path.dirname(os.path.realpath(__file__)) + "/../neural-chessboard")
-# sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../neural-chessboard")
-# from neural_chessboard.main import detect
-
-# result = subprocess.run(['python3', 'main.py', 'detect', '--input="clayboards/IMG_1353.jpg"', '--output="clayboards_out/board_1353.jpg"'], capture_output=True, cwd="../neural-chessboard/")
-# print(result)
 
 from flask import Flask, request
 import os, time

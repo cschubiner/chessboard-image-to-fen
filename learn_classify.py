@@ -35,16 +35,25 @@ y_val = y_full[n:]
 
 from sklearn import linear_model
 clf = linear_model.LogisticRegressionCV(
-    max_iter=2000,
+    max_iter=1200,
     Cs=np.geomspace(1e-1, 1e-7, 15),
     class_weight='balanced'
 )
-# clf.fit(X_train, y_train)
-clf.fit(X_full, y_full)
-print('train score:', clf.score(X_train, y_train))
-print('val score:', clf.score(X_val, y_val))
+clf.fit(X_train, y_train)
+print('.8 - train score:', clf.score(X_train, y_train))
+print('.8 - val score:', clf.score(X_val, y_val))
 
+print('.8 - train score:', clf.score(X_train, y_train))
+print('.8 - val score:', clf.score(X_val, y_val))
+
+
+clf.fit(X_full, y_full)
 dump(clf, 'clf.joblib')
-print('train score:', clf.score(X_train, y_train))
-print('val score:', clf.score(X_val, y_val))
+print('full train score:', clf.score(X_train, y_train))
+print('full val score:', clf.score(X_val, y_val))
+
+print('full train score:', clf.score(X_train, y_train))
+print('full val score:', clf.score(X_val, y_val))
+print('full full score:', clf.score(X_full, y_full))
+
 
