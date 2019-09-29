@@ -1,3 +1,4 @@
+uploads/processed_upload-*
 images/*
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import urllib.parse
 import os
 import sys
 import subprocess
@@ -75,10 +76,14 @@ def upload_file():
         print('file_url', file_url)
         print('processed_file_url', processed_file_url)
         print('processed_filepath_new', processed_filepath_new)
-        result = eval_images([processed_filepath_new])
-        board_s = '<br/>'.join(result)
+        result, fen = eval_images([processed_filepath_new])
+        # board_s = '<br/>'.join(' '.join(result))
+        board_s = ''
+        print(fen)
+        fen_link = '<a href="https://lichess.org/analysis/standard/' + urllib.parse.quote(fen.replace(' ', '_')) + '">Analyze on lichess.com</a>'
+        print(fen_link)
 
-        return html + '<br/>' + board_s + '<br/><br/><img src=' + processed_file_url + '>'
+        return html + '<br/>' + fen_link + '<br/>' + board_s + '<br/><br/><img src=' + processed_file_url + '>'
     return html
 
 
