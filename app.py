@@ -28,8 +28,9 @@ patch_request_class(app)  # set maximum file size, default is 16MB
 
 html = '''
     <!DOCTYPE html>
-    <title>Upload File</title>
-    <h1>Photo Upload</h1>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clay's chess board image analzer</title>
+    <h1>Upload Chess board image</h1>
     <form method=post enctype=multipart/form-data>
          <input type=file name=photo>
          <input type=submit value=Upload>
