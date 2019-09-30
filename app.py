@@ -81,7 +81,7 @@ def upload_file():
 
         print(fen_link)
 
-        return html + '<br/>' + fen_link + '<br/>' + board_s + '<br/><br/><img style="width:350px;" src=' + processed_file_url + '>'
+        return html + '<br/>' + fen_link + '<br/>' + board_s + '<br/><br/><img style="width:350px;" src="' + processed_file_url + '"/>'
     return html
 
 
