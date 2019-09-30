@@ -29,6 +29,10 @@ html = '''
          <input type=file name=photo>
          <input type=submit value=Upload>
     </form>
+    <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"
+            integrity="sha384-8Vi8VHwn3vjQ9eUHUxex3JSN/NFqUg3QbPyX8kWyb93+8AC/pPWTzj+nHtbC5bxD"
+            crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/core.js" integrity="sha256-36hEPcG8mKookfvUVvEqRkpdYV1unP6wvxIqbgdeVhk=" crossorigin="anonymous"></script>
     '''
 
 def wait_for_file():
@@ -75,13 +79,20 @@ def upload_file():
         # board_s = '<br/>'.join(' '.join(result))
         board_s = ''
         print(fen)
+
+        chessboard_js_html = f"<script> var ruyLopez = '{fen}'; " + """
+        var board = Chessboard('myBoard', ruyLopez)
+          </script>
+          '<div id="myBoard" style="width: 400px"></div>'
+        """
+
         fen_link = '<a href="https://lichess.org/analysis/standard/' + urllib.parse.quote(fen.replace(' ', '_')) + '">Analyze on lichess.com</a><br/>'
         fen_link += '<a href="https://lichess.org/editor?fen=' + urllib.parse.quote(fen.replace(' ', '_')) + '">Edit board on lichess.com</a><br/>'
         iframe = '<iframe style="height:400px;" src="https://lichess.org/editor?fen=' + urllib.parse.quote(fen.replace(' ', '_')) + '"/>'
 
         print(fen_link)
 
-        return html + '<br/>' + fen_link + '<br/>' + board_s + '<br/><br/><img style="width:350px;" src="' + processed_file_url + '"/>' + iframe
+        return html + '<br/>' + fen_link + '<br/>' + chessboard_js_html + board_s + '<br/><br/><img style="width:350px;" src="' + processed_file_url + '"/>' + iframe
     return html
 
 
