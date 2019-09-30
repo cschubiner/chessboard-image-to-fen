@@ -77,11 +77,11 @@ def upload_file():
         print(fen)
         fen_link = '<a href="https://lichess.org/analysis/standard/' + urllib.parse.quote(fen.replace(' ', '_')) + '">Analyze on lichess.com</a><br/>'
         fen_link += '<a href="https://lichess.org/editor?fen=' + urllib.parse.quote(fen.replace(' ', '_')) + '">Edit board on lichess.com</a><br/>'
-        fen_link += '<iframe style="height:400px;" src="https://lichess.org/editor?fen=' + urllib.parse.quote(fen.replace(' ', '_')) + '"/>'
+        iframe = '<iframe style="height:400px;" src="https://lichess.org/editor?fen=' + urllib.parse.quote(fen.replace(' ', '_')) + '"/>'
 
         print(fen_link)
 
-        return html + '<br/>' + fen_link + '<br/>' + board_s + '<br/><br/><img style="width:350px;" src="' + processed_file_url + '"/>'
+        return html + '<br/>' + fen_link + '<br/>' + board_s + '<br/><br/><img style="width:350px;" src="' + processed_file_url + '"/>' + iframe
     return html
 
 
