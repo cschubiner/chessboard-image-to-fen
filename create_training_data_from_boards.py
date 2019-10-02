@@ -19,13 +19,13 @@ if __name__ == "__main__":
       if not line and (i == 0 or i == len(board_lines) - 1):
         continue
       if not line:
-        board.append(['--'] * 8)
+        board.append(['__'] * 8)
       else:
         row = []
         for c in chunks(line, 2):
           c = c[0].lower() + c[1].upper()
           # print(fname, c, len(board))
-          assert c in ['bR', 'bN', 'bB', 'bQ', 'bK', 'bP', 'wP', 'wR', 'wN', 'wB', 'wQ', 'wK', '--']
+          assert c in ['bR', 'bN', 'bB', 'bQ', 'bK', 'bP', 'wP', 'wR', 'wN', 'wB', 'wQ', 'wK', '__']
           row.append(c)
         assert len(row) == 8
         board.append(row)
