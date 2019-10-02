@@ -18,6 +18,38 @@ df = df.rename(columns={0: "image_name", 1: "label"})
 df = df.sample(frac=1).reset_index(drop=True) # shuffle rows
 print(df)
 
+if True: # if make csv
+  import csv
+  with open('piece_labels.csv', 'w', newline='', encoding='utf-8') as csvfile:
+      csvwriter = csv.writer(csvfile, delimiter=',',
+                              quotechar='|', quoting=csv.QUOTE_MINIMAL)
+      # csvwriter.writerow(['set','image_path','label'])
+      total_rows = len(df.index)
+      print('total_rows')
+      print(total_rows)
+      validate = 0.2
+      test = 0.0
+      start_test = 1.0 - test
+      start_validate = start_test - validate
+
+      for i, row in df.iterrows():
+        # TRAIN,gs://My_Bucket/sample1.jpg,cat
+        percentage = i/total_rows
+        set_str = 'TRAIN'
+        if percentage >= start_test:
+          set_str = 'TEST'
+        elif percentage >= start_validate:
+          set_str = 'VALIDATE'
+
+        filename, label = row
+        filename = 'gs://chess-auto-ml-vcm/' + filename
+        if label == '__':
+          label = 'zz'
+        # csvwriter.writerow([set_str, filename, label])
+        csvwriter.writerow([filename, label])
+
+  exit()
+
 img_paths = list(df['image_name'])
 label = list(df['label'])
 

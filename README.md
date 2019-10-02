@@ -101,6 +101,21 @@ cd ~/chessboard-image-to-fen/
 python3 eval_classify.py
 
 
+## Google Cloud AutoML Vision
+make sure you run these commands in the google cloud shell of the project that has autoML in it
+
+PROJECT=$(gcloud config get-value project) && BUCKET="${PROJECT}-vcm"
+gsutil mb -p ${PROJECT} -c regional -l us-central1 gs://${BUCKET}
+
+gcloud projects add-iam-policy-binding $PROJECT \
+  --member="serviceAccount:custom-vision@appspot.gserviceaccount.com" \
+  --role="roles/ml.admin"
+gcloud projects add-iam-policy-binding $PROJECT \
+  --member="serviceAccount:custom-vision@appspot.gserviceaccount.com" \
+  --role="roles/storage.admin"
+gcloud projects add-iam-policy-binding $PROJECT \
+  --member="serviceAccount:custom-vision@appspot.gserviceaccount.com" \
+  --role="roles/serviceusage.serviceUsageAdmin"
 
 ## Notes
 
