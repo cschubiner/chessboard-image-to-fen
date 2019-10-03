@@ -24,7 +24,7 @@ train_datagen =  ImageDataGenerator(
       zoom_range=0.05,
       shear_range=0.05,
       zca_whitening=False,
-      validation_split=0.15,
+      validation_split=0.185,
     )
 
 train_generator = train_datagen.flow_from_directory(TRAIN_DIR, target_size=(HEIGHT, WIDTH), batch_size=BATCH_SIZE, subset='training')
@@ -68,21 +68,19 @@ num_train_images = len(train_generator)
 adam = Adam(lr=0.00001)
 finetune_model.compile(adam, loss='categorical_crossentropy', metrics=['accuracy'])
 
-filepath="./checkpoints/" + "ResNet50" + "best_model_weights.h5"
-checkpoint = ModelCheckpoint(filepath, monitor='val_loss', mode='min', save_best_only=True)
-early_stopping = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=3)
+filepath="./checkpoints/" + "ResNet50" + "best_model_weights_val_acc.h5"
+checkpoint = ModelCheckpoint(filepath, monitor='val_acc', mode='max', save_best_only=True)
+early_stopping = EarlyStopping(monitor='val_acc', mode='max', verbose=1, patience=10)
 callbacks_list = [checkpoint, early_stopping]
 
 history = finetune_model.fit_generator(train_generator,
                                        epochs=NUM_EPOCHS,
                                        workers=8,
-                                       steps_per_epoch = train_generator.samples // BATCH_SIZE,
+                                       steps_per_epoch = math.ceil(train_generator.samples // BATCH_SIZE),
                                        validation_data = validation_generator,
-                                       validation_steps = validation_generator.samples // BATCH_SIZE,
+                                       validation_steps = math.ceil(validation_generator.samples // BATCH_SIZE),
                                        shuffle=True,
                                        callbacks=callbacks_list)
-
-plot_training(history)
 
 # Plot the training and validation loss + accuracy
 def plot_training(history):
@@ -103,3 +101,6 @@ def plot_training(history):
     plt.show()
 
     plt.savefig('acc_vs_epochs.png')
+
+plot_training(history)
+
