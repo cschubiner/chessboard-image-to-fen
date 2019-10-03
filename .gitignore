@@ -1,4 +1,5 @@
 uploads/processed_upload-*
+checkpoints/*
 to_eval_pieces/*.jpg
 images/*
 # Byte-compiled / optimized / DLL files

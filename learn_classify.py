@@ -39,14 +39,14 @@ if True: # if make csv
         if percentage >= start_test:
           set_str = 'TEST'
         elif percentage >= start_validate:
-          set_str = 'VALIDATE'
+          set_str = 'VALIDATION'
 
         filename, label = row
         filename = 'gs://chess-auto-ml-vcm/' + filename
         if label == '__':
           label = 'zz'
-        # csvwriter.writerow([set_str, filename, label])
-        csvwriter.writerow([filename, label])
+        csvwriter.writerow([set_str, filename, label])
+        # csvwriter.writerow([filename, label])
 
   exit()
 
