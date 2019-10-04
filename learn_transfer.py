@@ -1,24 +1,21 @@
 from keras.applications.resnet50 import ResNet50, preprocess_input
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 import math
+from generate_plot_pics import generate_plot_pics
 
 HEIGHT = 150
 WIDTH = 150
 
-base_model = ResNet50(weights='imagenet',
-                      include_top=False,
-                      input_shape=(HEIGHT, WIDTH, 3))
-
 class_list = ['bR', 'bN', 'bB', 'bQ', 'bK', 'bP', 'wP', 'wR', 'wN', 'wB', 'wQ', 'wK', '__']
 
-from keras.preprocessing.image import ImageDataGenerator
+from keras.preprocessing.image import ImageDataGenerator, load_img
 
 TRAIN_DIR = "images_chess_pieces"
 BATCH_SIZE = 8
 
 train_datagen =  ImageDataGenerator(
       preprocessing_function=preprocess_input,
-      rotation_range=15,
+      rotation_range=8,
       horizontal_flip=True,
       brightness_range=[0.5, 1.5],
       zoom_range=0.05,
@@ -26,6 +23,11 @@ train_datagen =  ImageDataGenerator(
       zca_whitening=False,
       validation_split=0.185,
     )
+
+if True:
+  generate_plot_pics(train_datagen,load_img("images_chess_pieces/wN/_board_1454.jpg_750_300.jpg"))
+  exit()
+
 
 train_generator = train_datagen.flow_from_directory(TRAIN_DIR, target_size=(HEIGHT, WIDTH), batch_size=BATCH_SIZE, subset='training')
 validation_generator = train_datagen.flow_from_directory(TRAIN_DIR, target_size=(HEIGHT, WIDTH), batch_size=BATCH_SIZE, subset='validation')
@@ -52,8 +54,10 @@ def build_finetune_model(base_model, dropout, fc_layers, num_classes):
     return finetune_model
 
 FC_LAYERS = [1024, 1024]
-dropout = 0.5
+# dropout = 0.5
+dropout = 0.2
 
+base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(HEIGHT, WIDTH, 3))
 finetune_model = build_finetune_model(base_model,
                                       dropout=dropout,
                                       fc_layers=FC_LAYERS,
@@ -65,12 +69,13 @@ NUM_EPOCHS = 99999
 # num_train_images = 10000
 num_train_images = len(train_generator)
 
-adam = Adam(lr=0.00001)
+# adam = Adam(lr=0.00001)
+adam = Adam()
 finetune_model.compile(adam, loss='categorical_crossentropy', metrics=['accuracy'])
 
-filepath="./checkpoints/" + "ResNet50" + "best_model_weights_val_acc.h5"
+filepath="./checkpoints/" + "ResNet50" + "best_model_weights_val_acc_2.h5"
 checkpoint = ModelCheckpoint(filepath, monitor='val_acc', mode='max', save_best_only=True)
-early_stopping = EarlyStopping(monitor='val_acc', mode='max', verbose=1, patience=10)
+early_stopping = EarlyStopping(monitor='val_acc', mode='max', verbose=1, patience=3)
 callbacks_list = [checkpoint, early_stopping]
 
 history = finetune_model.fit_generator(train_generator,
