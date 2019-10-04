@@ -24,7 +24,7 @@ train_datagen =  ImageDataGenerator(
       validation_split=0.185,
     )
 
-if True:
+if False:
   generate_plot_pics(train_datagen,load_img("images_chess_pieces/wN/_board_1454.jpg_750_300.jpg"))
   exit()
 
@@ -55,7 +55,7 @@ def build_finetune_model(base_model, dropout, fc_layers, num_classes):
 
 FC_LAYERS = [1024, 1024]
 # dropout = 0.5
-dropout = 0.2
+dropout = 0.3
 
 base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(HEIGHT, WIDTH, 3))
 finetune_model = build_finetune_model(base_model,
@@ -70,7 +70,7 @@ NUM_EPOCHS = 99999
 num_train_images = len(train_generator)
 
 # adam = Adam(lr=0.00001)
-adam = Adam()
+adam = Adam(lr=0.00005)
 finetune_model.compile(adam, loss='categorical_crossentropy', metrics=['accuracy'])
 
 filepath="./checkpoints/" + "ResNet50" + "best_model_weights_val_acc_2.h5"
