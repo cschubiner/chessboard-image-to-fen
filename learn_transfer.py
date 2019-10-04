@@ -1,4 +1,5 @@
 from keras.applications.resnet50 import ResNet50, preprocess_input
+import matplotlib.pyplot as plt
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 import math
 from generate_plot_pics import generate_plot_pics
@@ -17,10 +18,10 @@ train_datagen =  ImageDataGenerator(
       preprocessing_function=preprocess_input,
       rotation_range=8,
       horizontal_flip=True,
-      brightness_range=[0.5, 1.5],
+      brightness_range=[0.8, 1.2],
       zoom_range=0.05,
       shear_range=0.05,
-      zca_whitening=False,
+      zca_whitening=True,
       validation_split=0.185,
     )
 
@@ -73,9 +74,9 @@ num_train_images = len(train_generator)
 adam = Adam(lr=0.00005)
 finetune_model.compile(adam, loss='categorical_crossentropy', metrics=['accuracy'])
 
-filepath="./checkpoints/" + "ResNet50" + "best_model_weights_val_acc_2.h5"
-checkpoint = ModelCheckpoint(filepath, monitor='val_acc', mode='max', save_best_only=True)
-early_stopping = EarlyStopping(monitor='val_acc', mode='max', verbose=1, patience=3)
+filepath="./checkpoints/" + "ResNet50" + "best_model_weights_val_loss_zca_true.h5"
+checkpoint = ModelCheckpoint(filepath, monitor='val_loss', mode='min', save_best_only=True)
+early_stopping = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=3)
 callbacks_list = [checkpoint, early_stopping]
 
 history = finetune_model.fit_generator(train_generator,
