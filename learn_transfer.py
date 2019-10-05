@@ -12,7 +12,8 @@ class_list = ['bR', 'bN', 'bB', 'bQ', 'bK', 'bP', 'wP', 'wR', 'wN', 'wB', 'wQ', 
 from keras.preprocessing.image import ImageDataGenerator, load_img
 
 TRAIN_DIR = "images_chess_pieces"
-BATCH_SIZE = 8
+# BATCH_SIZE = 8
+BATCH_SIZE = 32
 
 train_datagen =  ImageDataGenerator(
       preprocessing_function=preprocess_input,
@@ -55,9 +56,10 @@ def build_finetune_model(base_model, dropout, fc_layers, num_classes):
     return finetune_model
 
 # FC_LAYERS = [1024, 1024]
-FC_LAYERS = [512,512,512]
+# FC_LAYERS = [512,512,512]
+FC_LAYERS = [256,512,512]
 # dropout = 0.5
-dropout = 0.3
+dropout = 0.5
 
 base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(HEIGHT, WIDTH, 3))
 finetune_model = build_finetune_model(base_model,
@@ -75,7 +77,7 @@ num_train_images = len(train_generator)
 adam = Adam(lr=0.00002)
 finetune_model.compile(adam, loss='categorical_crossentropy', metrics=['accuracy'])
 
-filepath="./checkpoints/" + "ResNet50" + "best_model_weights_val_loss_3_512.h5"
+filepath="./checkpoints/" + "ResNet50" + "best_model_weights_val_loss_batch_32.h5"
 checkpoint = ModelCheckpoint(filepath, monitor='val_loss', mode='min', save_best_only=True)
 early_stopping = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=3)
 callbacks_list = [checkpoint, early_stopping]
