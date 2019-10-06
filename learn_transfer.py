@@ -57,7 +57,7 @@ def build_finetune_model(base_model, dropout, fc_layers, num_classes):
 
 # FC_LAYERS = [1024, 1024]
 # FC_LAYERS = [512,512,512]
-FC_LAYERS = [256,512,512]
+FC_LAYERS = [256,512,512, 512, 512, 512]
 # dropout = 0.5
 dropout = 0.5
 
@@ -73,11 +73,11 @@ NUM_EPOCHS = 99999
 # num_train_images = 10000
 num_train_images = len(train_generator)
 
-# adam = Adam(lr=0.00001)
-adam = Adam(lr=0.00002)
-finetune_model.compile(adam, loss='categorical_crossentropy', metrics=['accuracy'])
+# optimizer = Adam(lr=0.00001)
+optimizer = Adam(lr=0.000015)
+finetune_model.compile(optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
 
-filepath="./checkpoints/" + "ResNet50" + "best_model_weights_val_loss_batch_32.h5"
+filepath="./checkpoints/" + "ResNet50" + "best_model_weights_val_loss_batch_16.h5"
 checkpoint = ModelCheckpoint(filepath, monitor='val_loss', mode='min', save_best_only=True)
 early_stopping = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=3)
 callbacks_list = [checkpoint, early_stopping]
