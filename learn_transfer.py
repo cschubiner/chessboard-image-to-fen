@@ -4,8 +4,8 @@ from keras.callbacks import ModelCheckpoint, EarlyStopping
 import math
 from generate_plot_pics import generate_plot_pics
 
-HEIGHT = 150
-WIDTH = 150
+HEIGHT = 300
+WIDTH = 300
 
 class_list = ['bR', 'bN', 'bB', 'bQ', 'bK', 'bP', 'wP', 'wR', 'wN', 'wB', 'wQ', 'wK', '__']
 
@@ -58,6 +58,7 @@ def build_finetune_model(base_model, dropout, fc_layers, num_classes):
 # FC_LAYERS = [1024, 1024]
 # FC_LAYERS = [512,512,512]
 FC_LAYERS = [256,512,512, 512, 512, 512]
+FC_LAYERS = [1024,1024]
 # dropout = 0.5
 dropout = 0.5
 
@@ -77,9 +78,9 @@ num_train_images = len(train_generator)
 optimizer = Adam(lr=0.000015)
 finetune_model.compile(optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
 
-filepath="./checkpoints/" + "ResNet50" + "best_model_weights_val_loss_batch_16.h5"
+filepath="./checkpoints/" + "ResNet50" + "best_model_weights_val_loss_batch_16_size300.h5"
 checkpoint = ModelCheckpoint(filepath, monitor='val_loss', mode='min', save_best_only=True)
-early_stopping = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=3)
+early_stopping = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=8)
 callbacks_list = [checkpoint, early_stopping]
 
 history = finetune_model.fit_generator(train_generator,
