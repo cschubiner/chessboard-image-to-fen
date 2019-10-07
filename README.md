@@ -20,6 +20,18 @@ conda activate tf-cpu
 git pull
 python3 file_checker.py
 
+# steps to annotate new training data:
+  take photos
+  put photos in neural-chessboard/chess_1857 and edit detect_mass.sh
+  run ./detect_mass.sh
+  delete all malformed chess boards in output folder
+  move files that exist in chessboard-image-to-fen/clayboards_out/ to chessboard-image-to-fen/clayboards_out_processed/
+  move files from neural-chessboard output folder to chessboard-image-to-fen/clayboards_out/
+  label all images in labeled_boards.py
+  run create_training_data_from_boards.py
+  ensure new images exist in training folders and validate images there to ensure they're good
+  move files that exist in chessboard-image-to-fen/clayboards_out/ to chessboard-image-to-fen/clayboards_out_processed/
+
 # commands to setup ec2 instance:
 sudo yum install git -y
 y
