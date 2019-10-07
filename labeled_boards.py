@@ -4820,7 +4820,7 @@ wpwpwpwpwpwpwpwp
 wrwnwbwqwkwbwnwr
 """,
 "board4_2289.jpg":"""
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 bpbpbpbpbpbpbpbp
 
 
@@ -4830,7 +4830,7 @@ wpwpwpwpwpwpwpwp
 wrwnwbwqwkwbwnwr
 """,
 "board4_2300.jpg":"""
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 bpbpbpbpbpbpbpbp
 
 
@@ -4840,7 +4840,7 @@ wpwpwpwpwpwpwpwp
 wrwnwbwqwkwbwnwr
 """,
 "board4_2303.jpg":"""
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 bpbpbpbpbpbpbpbp
 
 
@@ -4850,7 +4850,7 @@ wpwpwpwpwpwpwpwp
 wrwnwbwqwkwbwnwr
 """,
 "board4_2304.jpg":"""
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 bpbpbpbpbpbpbpbp
 
 
@@ -4860,7 +4860,7 @@ wpwpwpwpwpwpwpwp
 wrwnwbwqwkwbwnwr
 """,
 "board4_2306.jpg":"""
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 bpbpbpbpbpbpbpbp
 
 
@@ -4870,7 +4870,7 @@ wpwpwpwpwpwpwpwp
 wrwnwbwqwkwbwnwr
 """,
 "board4_2314.jpg":"""
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 bpbpbpbpbpbpbpbp
 
 
@@ -4880,7 +4880,7 @@ wpwpwpwpwpwpwpwp
 wrwnwbwqwkwbwnwr
 """,
 "board4_2316.jpg":"""
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 bpbpbpbpbpbpbpbp
 
 
@@ -4890,7 +4890,7 @@ wpwpwpwpwpwpwpwp
 wrwnwbwqwkwbwnwr
 """,
 "board4_2317.jpg":"""
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 bpbpbpbpbpbpbpbp
 
 
@@ -4903,7 +4903,7 @@ wrwnwbwqwkwbwnwr
 ________________
 bpbpbpbpbpbpbpbp
 ________________
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 wrwnwbwqwkwbwnwr
 ________________
 wpwpwpwpwpwpwpwp
@@ -4913,7 +4913,7 @@ ________________
 ________________
 bpbpbpbpbpbpbpbp
 ________________
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 wrwnwbwqwkwbwnwr
 ________________
 wpwpwpwpwpwpwpwp
@@ -4923,7 +4923,7 @@ ________________
 ________________
 bpbpbpbpbpbpbpbp
 ________________
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 wrwnwbwqwkwbwnwr
 ________________
 wpwpwpwpwpwpwpwp
@@ -4933,7 +4933,7 @@ ________________
 ________________
 bpbpbpbpbpbpbpbp
 ________________
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 wrwnwbwqwkwbwnwr
 ________________
 wpwpwpwpwpwpwpwp
@@ -4943,7 +4943,7 @@ ________________
 ________________
 bpbpbpbpbpbpbpbp
 ________________
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 wrwnwbwqwkwbwnwr
 ________________
 wpwpwpwpwpwpwpwp
@@ -4953,7 +4953,7 @@ ________________
 ________________
 bpbpbpbpbpbpbpbp
 ________________
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 wrwnwbwqwkwbwnwr
 ________________
 wpwpwpwpwpwpwpwp
@@ -4963,7 +4963,7 @@ ________________
 ________________
 bpbpbpbpbpbpbpbp
 ________________
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 wrwnwbwqwkwbwnwr
 ________________
 wpwpwpwpwpwpwpwp
@@ -4973,7 +4973,7 @@ ________________
 ________________
 bpbpbpbpbpbpbpbp
 ________________
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 wrwnwbwqwkwbwnwr
 ________________
 wpwpwpwpwpwpwpwp
@@ -4983,7 +4983,7 @@ ________________
 ________________
 bpbpbpbpbpbpbpbp
 ________________
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 wrwnwbwqwkwbwnwr
 ________________
 wpwpwpwpwpwpwpwp
@@ -4993,7 +4993,7 @@ ________________
 ________________
 bpbpbpbpbpbpbpbp
 ________________
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 wrwnwbwqwkwbwnwr
 ________________
 wpwpwpwpwpwpwpwp
@@ -5003,7 +5003,7 @@ ________________
 ________________
 bpbpbpbpbpbpbpbp
 ________________
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 wrwnwbwqwkwbwnwr
 ________________
 wpwpwpwpwpwpwpwp
@@ -5012,7 +5012,7 @@ ________________
 "board4_2403.jpg":"""
 ________________
 bpbpbpbpbpbpbpbp
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 ________________
 ________________
 wrwnwbwqwkwbwnwr
@@ -5022,7 +5022,7 @@ ________________
 "board4_2400.jpg":"""
 ________________
 bpbpbpbpbpbpbpbp
-brbnbbbqbkbbbnbr
+brbnbbbkbQbbbnbr
 ________________
 ________________
 wrwnwbwqwkwbwnwr
