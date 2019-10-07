@@ -84,15 +84,9 @@ clf.fit(X_train, y_train)
 print('.8 - train score:', clf.score(X_train, y_train))
 print('.8 - val score:', clf.score(X_val, y_val))
 
-print('.8 - train score:', clf.score(X_train, y_train))
-print('.8 - val score:', clf.score(X_val, y_val))
-
-
 clf.fit(X_full, y_full)
 dump(clf, 'clf.joblib')
+
 print('full train score:', clf.score(X_train, y_train))
 print('full val score:', clf.score(X_val, y_val))
-
 print('full full score:', clf.score(X_full, y_full))
-
-
