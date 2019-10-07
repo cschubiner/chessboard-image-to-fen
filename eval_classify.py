@@ -74,6 +74,8 @@ def eval_images(board_file_names=None):
     for index, fname in enumerate(pieces_file_names):
       i, j, key = fname[0], fname[2], fname[:3]
       pred = pieces_preds[index]
+      if pred == '--':
+        pred = '__'
       pred_board_dict[key] = pred
 
     board = list()

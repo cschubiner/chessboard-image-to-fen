@@ -4,26 +4,26 @@ from keras.callbacks import ModelCheckpoint, EarlyStopping
 import math
 from generate_plot_pics import generate_plot_pics
 
-HEIGHT = 300
-WIDTH = 300
+HEIGHT = 150
+WIDTH = 150
 
 class_list = ['bR', 'bN', 'bB', 'bQ', 'bK', 'bP', 'wP', 'wR', 'wN', 'wB', 'wQ', 'wK', '__']
 
 from keras.preprocessing.image import ImageDataGenerator, load_img
 
 TRAIN_DIR = "images_chess_pieces"
-# BATCH_SIZE = 8
-BATCH_SIZE = 32
+BATCH_SIZE = 8
+# BATCH_SIZE = 32
 
 train_datagen =  ImageDataGenerator(
       preprocessing_function=preprocess_input,
-      rotation_range=5,
+      # rotation_range=5,
       horizontal_flip=True,
-      brightness_range=[0.8, 1.2],
+      brightness_range=[0.6, 1.4],
       # zoom_range=0.05,
-      shear_range=0.03,
+      # shear_range=0.03,
       # zca_whitening=True,
-      validation_split=0.15,
+      validation_split=0.2,
     )
 
 if False:
@@ -31,20 +31,19 @@ if False:
   exit()
 
 
-train_generator = train_datagen.flow_from_directory(TRAIN_DIR, target_size=(HEIGHT, WIDTH), batch_size=BATCH_SIZE, subset='training')
-validation_generator = train_datagen.flow_from_directory(TRAIN_DIR, target_size=(HEIGHT, WIDTH), batch_size=BATCH_SIZE, subset='validation')
+train_generator = train_datagen.flow_from_directory(TRAIN_DIR, target_size=(HEIGHT, WIDTH), batch_size=BATCH_SIZE, subset='training', class_mode='categorical')
+validation_generator = train_datagen.flow_from_directory(TRAIN_DIR, target_size=(HEIGHT, WIDTH), batch_size=BATCH_SIZE, subset='validation', class_mode='categorical')
 
 from keras.layers import Dense, Activation, Flatten, Dropout
 from keras.models import Sequential, Model
 
-def build_finetune_model(base_model, dropout, fc_layers, num_classes):
+def build_finetune_model(base_model, dropout, num_classes):
     for layer in base_model.layers:
         layer.trainable = False
 
     x = base_model.output
     x = Flatten()(x)
-    for fc in fc_layers:
-        # New FC layer, random init
+    for fc in [1024, 1024]:
         x = Dense(fc, activation='relu')(x)
         x = Dropout(dropout)(x)
 
@@ -55,17 +54,12 @@ def build_finetune_model(base_model, dropout, fc_layers, num_classes):
 
     return finetune_model
 
-# FC_LAYERS = [1024, 1024]
-# FC_LAYERS = [512,512,512]
-FC_LAYERS = [256,512,512, 512, 512, 512]
-FC_LAYERS = [1024,1024]
 # dropout = 0.5
 dropout = 0.5
 
 base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(HEIGHT, WIDTH, 3))
 finetune_model = build_finetune_model(base_model,
                                       dropout=dropout,
-                                      fc_layers=FC_LAYERS,
                                       num_classes=len(class_list))
 
 from keras.optimizers import SGD, Adam
@@ -76,9 +70,13 @@ num_train_images = len(train_generator)
 
 # optimizer = Adam(lr=0.00001)
 optimizer = Adam(lr=0.000015)
+sgd = SGD(lr = 0.01, decay = 1e-6, momentum = 0.9, nesterov = True)
+
 finetune_model.compile(optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
 
-filepath="./checkpoints/" + "ResNet50" + "best_model_weights_val_loss_batch_16_size300.h5"
+print(finetune_model.summary())
+
+filepath="./checkpoints/" + "ResNet50" + "best_model_weights_val_loss_batch_8_sgd.h5"
 checkpoint = ModelCheckpoint(filepath, monitor='val_loss', mode='min', save_best_only=True)
 early_stopping = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=8)
 callbacks_list = [checkpoint, early_stopping]
