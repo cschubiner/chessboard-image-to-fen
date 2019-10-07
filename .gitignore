@@ -1,3 +1,4 @@
+clayboards_out_processed/*
 uploads/processed_upload-*
 checkpoints/*.h5
 to_eval_pieces/*.jpg
