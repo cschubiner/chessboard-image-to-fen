@@ -1,4 +1,5 @@
 import functools
+import pickle
 import os
 from image_features import image_features
 import numpy as np
@@ -55,6 +56,14 @@ label = list(df['label'])
 
 X_full = image_features(img_paths, progress=True)
 y_full = label
+try:
+  print('pickling!!')
+  with open('X_full.pickle', 'wb') as f:
+      # Pickle the 'data' dictionary using the highest protocol available.
+      pickle.dump(X_full, f, pickle.HIGHEST_PROTOCOL)
+except Exception:
+  print('could not pickle')
+
 
 n = round(0.8 * len(img_paths))
 # n = round(0.1 * len(img_paths))
