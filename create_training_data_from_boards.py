@@ -33,5 +33,9 @@ if __name__ == "__main__":
     assert len(board) == 8
 
     # Now need to split up the image and put it into folders
-    split_board_image('clayboards_out/' + fname, fname, 'images_chess_pieces', board)
+    # clayboards_out is input folder
+    import os.path
+    fpath = 'clayboards_out/' + fname
+    if os.path.exists(fpath):
+      split_board_image(fpath, fname, 'images_chess_pieces', board)
 

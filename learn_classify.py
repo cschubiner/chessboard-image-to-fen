@@ -18,7 +18,7 @@ df = df.rename(columns={0: "image_name", 1: "label"})
 df = df.sample(frac=1).reset_index(drop=True) # shuffle rows
 print(df)
 
-if True: # if make csv
+if False: # if make csv
   import csv
   with open('piece_labels.csv', 'w', newline='', encoding='utf-8') as csvfile:
       csvwriter = csv.writer(csvfile, delimiter=',',
@@ -84,8 +84,6 @@ dump(clf, 'clf.joblib')
 print('full train score:', clf.score(X_train, y_train))
 print('full val score:', clf.score(X_val, y_val))
 
-print('full train score:', clf.score(X_train, y_train))
-print('full val score:', clf.score(X_val, y_val))
 print('full full score:', clf.score(X_full, y_full))
 
 
