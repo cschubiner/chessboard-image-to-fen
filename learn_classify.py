@@ -82,19 +82,28 @@ X_val = X_full[n:]
 y_val = y_full[n:]
 
 
-# from sklearn import linear_model
-# clf = linear_model.LogisticRegressionCV(
-#     max_iter=1200,
-#     Cs=np.geomspace(1e-1, 1e-7, 15),
-#     class_weight='balanced'
-# )
+from sklearn import linear_model, ensemble
 
-import autosklearn.classification
-clf = autosklearn.classification.AutoSklearnClassifier()
+def validate_score_clf(clf, name):
+  clf.fit(X_train, y_train)
+  print(name, '.8 - train score:', clf.score(X_train, y_train))
+  print(name, '.8 - val score:', clf.score(X_val, y_val))
 
-clf.fit(X_train, y_train)
-print('.8 - train score:', clf.score(X_train, y_train))
-print('.8 - val score:', clf.score(X_val, y_val))
+validate_score_clf(ensemble.GradientBoostingClassifier(), 'GradientBoostingClassifier')
+validate_score_clf(ensemble.RandomForestClassifier(), 'RandomForestClassifier')
+validate_score_clf(linear_model.ElasticNetCV(), 'linear_model.ElasticNetCV')
+validate_score_clf(linear_model.LarsCV(), 'linear_model.LarsCV')
+validate_score_clf(linear_model.LassoCV(), 'linear_model.LassoCV')
+validate_score_clf(linear_model.OrthogonalMatchingPursuitCV(), 'linear_model.OrthogonalMatchingPursuitCV')
+validate_score_clf(linear_model.RidgeClassifierCV(), 'linear_model.RidgeClassifierCV')
+
+clf = linear_model.LogisticRegressionCV(
+    max_iter=1200,
+    Cs=np.geomspace(1e-1, 1e-7, 15),
+    class_weight='balanced'
+)
+validate_score_clf(clf, 'LogisticRegressionCV')
+
 
 clf.fit(X_full, y_full)
 dump(clf, 'clf.joblib')
