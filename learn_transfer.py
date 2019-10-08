@@ -16,7 +16,7 @@ TRAIN_DIR = "images_chess_pieces"
 BATCH_SIZE = 8
 # BATCH_SIZE = 32
 
-train_datagen =  ImageDataGenerator(
+train_datagen = ImageDataGenerator(
       preprocessing_function=preprocess_input,
       # rotation_range=5,
       horizontal_flip=True,
