@@ -60,7 +60,8 @@ def get_with_hash(obj_to_hash, cache_miss_function):
   filename = 'saved_objects/obj_' + key
   if os.path.exists(filename):
       print('Found', filename, 'so using that')
-      return pickle.load(filename)
+      with open(filename, 'rb') as f:
+          return pickle.load(f)
   print('Could not find', filename, 'so manually calculating it...')
   with open(filename, 'wb') as f:
     pickle.dump(cache_miss_function(), f, pickle.HIGHEST_PROTOCOL)
@@ -68,6 +69,7 @@ def get_with_hash(obj_to_hash, cache_miss_function):
 
 X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, progress=True))
 y_full = label
+assert len(X_full) == len(img_paths) == len(y_full)
 
 n = round(0.8 * len(img_paths))
 # n = round(0.1 * len(img_paths))
@@ -86,6 +88,8 @@ y_val = y_full[n:]
 # )
 
 import autosklearn.classification
+clf = autosklearn.classification.AutoSklearnClassifier()
+
 clf.fit(X_train, y_train)
 print('.8 - train score:', clf.score(X_train, y_train))
 print('.8 - val score:', clf.score(X_val, y_val))
