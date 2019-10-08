@@ -63,8 +63,10 @@ def get_with_hash(obj_to_hash, cache_miss_function):
       with open(filename, 'rb') as f:
           return pickle.load(f)
   print('Could not find', filename, 'so manually calculating it...')
+  ret = cache_miss_function()
   with open(filename, 'wb') as f:
-    pickle.dump(cache_miss_function(), f, pickle.HIGHEST_PROTOCOL)
+    pickle.dump(ret, f, pickle.HIGHEST_PROTOCOL)
+  return ret
 
 
 X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, progress=True))
