@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 import math
 from generate_plot_pics import generate_plot_pics
+from keras.layers.normalization import BatchNormalization
 
 HEIGHT = 150
 WIDTH = 150
@@ -41,18 +42,29 @@ def build_finetune_model(base_model, dropout, num_classes):
     for layer in base_model.layers:
         layer.trainable = False
 
-    x = base_model.output
-    x = Flatten()(x)
-    for fc in [1024, 1024]:
-        x = Dense(fc, activation='relu')(x)
-        x = Dropout(dropout)(x)
+    if base_model.output.shape.ndims > 2:
+        output = Flatten()(base_model.output)
+    else:
+        output = base_model.output
+
+    output = BatchNormalization()(output)
+    output = Dropout(0.5)(output)
+    output = Dense(128, activation='relu')(output)
+    output = BatchNormalization()(output)
+    output = Dropout(0.5)(output)
+    output = Dense(num_classes, activation='softmax')(output)
+    model = Model(base_model.input, output)
+    return model
+    # x = base_model.output
+    # x = Flatten()(x)
+    # for fc in [1024, 1024]:
+    #     x = Dense(fc, activation='relu')(x)
+    #     x = Dropout(dropout)(x)
 
     # New softmax layer
-    predictions = Dense(num_classes, activation='softmax')(x)
-
-    finetune_model = Model(inputs=base_model.input, outputs=predictions)
-
-    return finetune_model
+    # predictions = Dense(num_classes, activation='softmax')(x)
+    # finetune_model = Model(inputs=base_model.input, outputs=predictions)
+    # return finetune_model
 
 # dropout = 0.5
 dropout = 0.5
@@ -70,7 +82,7 @@ num_train_images = len(train_generator)
 
 # optimizer = Adam(lr=0.00001)
 optimizer = Adam(lr=0.000015)
-sgd = SGD(lr = 0.01, decay = 1e-6, momentum = 0.9, nesterov = True)
+# sgd = SGD(lr = 0.01, decay = 1e-6, momentum = 0.9, nesterov = True)
 
 finetune_model.compile(optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
 
@@ -78,7 +90,7 @@ print(finetune_model.summary())
 
 filepath="./checkpoints/" + "ResNet50" + "best_model_weights_val_loss_batch_8_sgd.h5"
 checkpoint = ModelCheckpoint(filepath, monitor='val_loss', mode='min', save_best_only=True)
-early_stopping = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=8)
+early_stopping = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=4)
 callbacks_list = [checkpoint, early_stopping]
 
 history = finetune_model.fit_generator(train_generator,

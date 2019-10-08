@@ -7,6 +7,7 @@ screen -S chess_flask
 screen -x -R chess_flask
 
 cd ~/chessboard-image-to-fen
+mkdir saved_objects
 conda activate tf-cpu
 psudo() { sudo env PATH="$PATH" "$@"; }
 git pull
@@ -39,7 +40,7 @@ y
 cd ~
 
 git clone git@github.com:cschubiner/chessboard-image-to-fen.git
-
+mkdir saved_objects
 
 git clone git@github.com:cschubiner/neural-chessboard.git
 yes

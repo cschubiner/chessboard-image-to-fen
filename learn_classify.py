@@ -1,4 +1,5 @@
 import functools
+from functools import partial
 import pickle
 import os
 from image_features import image_features
@@ -54,16 +55,19 @@ if False: # if make csv
 img_paths = list(df['image_name'])
 label = list(df['label'])
 
-X_full = image_features(img_paths, progress=True)
-y_full = label
-try:
-  print('pickling!!')
-  with open('X_full.pickle', 'wb') as f:
-      # Pickle the 'data' dictionary using the highest protocol available.
-      pickle.dump(X_full, f, pickle.HIGHEST_PROTOCOL)
-except Exception:
-  print('could not pickle')
+def get_with_hash(obj_to_hash, cache_miss_function):
+  key = str(obj_to_hash)[:8]
+  filename = 'saved_objects/obj_' + key
+  if os.path.exists(filename):
+      print('Found', filename, 'so using that')
+      return pickle.load(filename)
+  print('Could not find', filename, 'so manually calculating it...')
+  with open(filename, 'wb') as f:
+    pickle.dump(cache_miss_function(), f, pickle.HIGHEST_PROTOCOL)
 
+
+X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, progress=True))
+y_full = label
 
 n = round(0.8 * len(img_paths))
 # n = round(0.1 * len(img_paths))
@@ -74,12 +78,14 @@ X_val = X_full[n:]
 y_val = y_full[n:]
 
 
-from sklearn import linear_model
-clf = linear_model.LogisticRegressionCV(
-    max_iter=1200,
-    Cs=np.geomspace(1e-1, 1e-7, 15),
-    class_weight='balanced'
-)
+# from sklearn import linear_model
+# clf = linear_model.LogisticRegressionCV(
+#     max_iter=1200,
+#     Cs=np.geomspace(1e-1, 1e-7, 15),
+#     class_weight='balanced'
+# )
+
+import autosklearn.classification
 clf.fit(X_train, y_train)
 print('.8 - train score:', clf.score(X_train, y_train))
 print('.8 - val score:', clf.score(X_val, y_val))
