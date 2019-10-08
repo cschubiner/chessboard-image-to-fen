@@ -85,17 +85,21 @@ y_val = y_full[n:]
 from sklearn import linear_model, ensemble
 
 def validate_score_clf(clf, name):
-  clf.fit(X_train, y_train)
+  try:
+    clf.fit(X_train, y_train)
+  except Exception as e:
+    print("Exception!", e)
+
   print(name, '.8 - train score:', clf.score(X_train, y_train))
   print(name, '.8 - val score:', clf.score(X_val, y_val))
 
-validate_score_clf(ensemble.GradientBoostingClassifier(), 'GradientBoostingClassifier')
-validate_score_clf(ensemble.RandomForestClassifier(), 'RandomForestClassifier')
-validate_score_clf(linear_model.ElasticNetCV(), 'linear_model.ElasticNetCV')
 validate_score_clf(linear_model.LarsCV(), 'linear_model.LarsCV')
 validate_score_clf(linear_model.LassoCV(), 'linear_model.LassoCV')
 validate_score_clf(linear_model.OrthogonalMatchingPursuitCV(), 'linear_model.OrthogonalMatchingPursuitCV')
 validate_score_clf(linear_model.RidgeClassifierCV(), 'linear_model.RidgeClassifierCV')
+validate_score_clf(ensemble.GradientBoostingClassifier(), 'GradientBoostingClassifier')
+validate_score_clf(ensemble.RandomForestClassifier(), 'RandomForestClassifier')
+validate_score_clf(linear_model.ElasticNetCV(), 'linear_model.ElasticNetCV')
 
 clf = linear_model.LogisticRegressionCV(
     max_iter=1200,
