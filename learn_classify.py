@@ -85,26 +85,31 @@ y_val = y_full[n:]
 from sklearn import linear_model, ensemble
 
 def validate_score_clf(clf, name):
+  print('Fitting', name)
   try:
     clf.fit(X_train, y_train)
+    print(name, '.8 - train score:', clf.score(X_train, y_train))
+    print(name, '.8 - val score:', clf.score(X_val, y_val))
   except Exception as e:
     print("Exception!", e)
+    try:
+      clf.fit_transform(X_train, y_train)
+      print(name, '.8 - train score:', clf.score(X_train, y_train))
+      print(name, '.8 - val score:', clf.score(X_val, y_val))
+    except Exception as e:
+      print("Exception 2!", e)
 
-  print(name, '.8 - train score:', clf.score(X_train, y_train))
-  print(name, '.8 - val score:', clf.score(X_val, y_val))
-
-validate_score_clf(linear_model.LarsCV(), 'linear_model.LarsCV')
-validate_score_clf(linear_model.LassoCV(), 'linear_model.LassoCV')
+validate_score_clf(linear_model.LarsCV(max_iter=1200), 'linear_model.LarsCV')
+validate_score_clf(linear_model.LassoLarsCV(max_iter=1200), 'linear_model.LassoLarsCV')
+validate_score_clf(linear_model.LassoCV(max_iter=1200), 'linear_model.LassoCV')
+validate_score_clf(linear_model.ElasticNetCV(max_iter=1200), 'linear_model.ElasticNetCV')
 validate_score_clf(linear_model.OrthogonalMatchingPursuitCV(), 'linear_model.OrthogonalMatchingPursuitCV')
-validate_score_clf(linear_model.RidgeClassifierCV(), 'linear_model.RidgeClassifierCV')
-validate_score_clf(ensemble.GradientBoostingClassifier(), 'GradientBoostingClassifier')
-validate_score_clf(ensemble.RandomForestClassifier(), 'RandomForestClassifier')
-validate_score_clf(linear_model.ElasticNetCV(), 'linear_model.ElasticNetCV')
+validate_score_clf(ensemble.GradientBoostingClassifier(n_estimators=1000, verbose=1), 'GradientBoostingClassifier')
+validate_score_clf(ensemble.RandomForestClassifier(max_iter=1200, verbose=1), 'RandomForestClassifier')
+# validate_score_clf(linear_model.RidgeClassifierCV(), 'linear_model.RidgeClassifierCV')
 
 clf = linear_model.LogisticRegressionCV(
-    max_iter=1200,
-    Cs=np.geomspace(1e-1, 1e-7, 15),
-    class_weight='balanced'
+    max_iter=1200, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced', verbose=1
 )
 validate_score_clf(clf, 'LogisticRegressionCV')
 

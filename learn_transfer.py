@@ -49,9 +49,12 @@ def build_finetune_model(base_model, dropout, num_classes):
 
     output = BatchNormalization()(output)
     output = Dropout(0.5)(output)
-    output = Dense(128, activation='relu')(output)
+    output = Dense(256, activation='relu')(output)
     output = BatchNormalization()(output)
     output = Dropout(0.5)(output)
+    for i in range(4):
+      output = Dense(256 * (i + 1), activation='relu')(output)
+      output = Dropout(0.4)(output)
     output = Dense(num_classes, activation='softmax')(output)
     model = Model(base_model.input, output)
     return model
