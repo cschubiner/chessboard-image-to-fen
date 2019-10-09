@@ -104,7 +104,7 @@ validate_score_clf(linear_model.LassoLarsCV(max_iter=1200), 'linear_model.LassoL
 validate_score_clf(linear_model.LassoCV(max_iter=1200), 'linear_model.LassoCV')
 validate_score_clf(linear_model.ElasticNetCV(max_iter=1200), 'linear_model.ElasticNetCV')
 validate_score_clf(linear_model.OrthogonalMatchingPursuitCV(), 'linear_model.OrthogonalMatchingPursuitCV')
-validate_score_clf(ensemble.GradientBoostingClassifier(n_estimators=1000, verbose=1), 'GradientBoostingClassifier')
+validate_score_clf(ensemble.GradientBoostingClassifier(n_estimators=100, verbose=1), 'GradientBoostingClassifier')
 validate_score_clf(ensemble.RandomForestClassifier(max_iter=1200, verbose=1), 'RandomForestClassifier')
 # validate_score_clf(linear_model.RidgeClassifierCV(), 'linear_model.RidgeClassifierCV')
 
