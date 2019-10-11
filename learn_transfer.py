@@ -33,12 +33,32 @@ if False:
 
 
 train_generator = train_datagen.flow_from_directory(TRAIN_DIR, target_size=(HEIGHT, WIDTH), batch_size=BATCH_SIZE, subset='training', class_mode='categorical')
+# train_generator = train_datagen.flow_from_directory(TRAIN_DIR, target_size=(HEIGHT, WIDTH), batch_size=BATCH_SIZE, subset='training')
 validation_generator = train_datagen.flow_from_directory(TRAIN_DIR, target_size=(HEIGHT, WIDTH), batch_size=BATCH_SIZE, subset='validation', class_mode='categorical')
 
 from keras.layers import Dense, Activation, Flatten, Dropout
 from keras.models import Sequential, Model
 
-def build_finetune_model(base_model, dropout, num_classes):
+def build_autokeras_model(num_classes, train_generator, validation_generator):
+    import autokeras as ak
+    model = ak.ImageClassifier(verbose=True)
+
+    trainX, trainY = train_generator.next()
+    trainX = [x for x in trainX]
+    trainY = [x for x in trainY]
+    # Need to inverse the Y labels back to string before training
+    model.fit(trainX, trainY, time_limit=10)
+    model.final_fit(trainX, trainY, testX, testY, retrain=True)
+
+    # evaluate the Auto-Keras model
+    score = model.evaluate(testX, testY)
+    predictions = model.predict(testX)
+
+
+def build_transfer_model(num_classes):
+    dropout = 0.5
+    base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(HEIGHT, WIDTH, 3))
+
     for layer in base_model.layers:
         layer.trainable = False
 
@@ -69,39 +89,31 @@ def build_finetune_model(base_model, dropout, num_classes):
     # finetune_model = Model(inputs=base_model.input, outputs=predictions)
     # return finetune_model
 
-# dropout = 0.5
-dropout = 0.5
+num_classes = len(class_list)
 
-base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(HEIGHT, WIDTH, 3))
-finetune_model = build_finetune_model(base_model,
-                                      dropout=dropout,
-                                      num_classes=len(class_list))
+build_autokeras_model(num_classes, train_generator, validation_generator)
+finetune_model = build_transfer_model(num_classes=num_classes)
 
 from keras.optimizers import SGD, Adam
-
-NUM_EPOCHS = 99999
-# num_train_images = 10000
-num_train_images = len(train_generator)
 
 # optimizer = Adam(lr=0.00001)
 optimizer = Adam(lr=0.000015)
 # sgd = SGD(lr = 0.01, decay = 1e-6, momentum = 0.9, nesterov = True)
-
 finetune_model.compile(optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
 
 print(finetune_model.summary())
 
-filepath="./checkpoints/" + "ResNet50" + "best_model_weights_val_loss_batch_8_sgd.h5"
+filepath ="./checkpoints/" + "ResNet50" + "best_model_weights_val_loss_batch_8_sgd.h5"
 checkpoint = ModelCheckpoint(filepath, monitor='val_loss', mode='min', save_best_only=True)
 early_stopping = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=4)
 callbacks_list = [checkpoint, early_stopping]
 
 history = finetune_model.fit_generator(train_generator,
-                                       epochs=NUM_EPOCHS,
+                                       epochs=99999,
                                        workers=8,
-                                       steps_per_epoch = math.ceil(train_generator.samples // BATCH_SIZE),
-                                       validation_data = validation_generator,
-                                       validation_steps = math.ceil(validation_generator.samples // BATCH_SIZE),
+                                       steps_per_epoch=math.ceil(train_generator.samples // BATCH_SIZE),
+                                       validation_data=validation_generator,
+                                       validation_steps=math.ceil(validation_generator.samples // BATCH_SIZE),
                                        shuffle=True,
                                        callbacks=callbacks_list)
 

@@ -99,15 +99,25 @@ def validate_score_clf(clf, name):
     except Exception as e:
       print("Exception 2!", e)
 
+from tpot import TPOTClassifier
+
+# tpot_classifier = TPOTClassifier(generations=5, population_size=20, cv=5, random_state=42, verbosity=2)
+tpot_classifier = TPOTClassifier(generations=9, population_size=20, config_dict='TPOT light', verbosity=2)
+validate_score_clf(tpot_classifier, 'TPOTClassifier')
+tpot_classifier.export('tpot_exported_pipeline.py')
+
+
 validate_score_clf(linear_model.LarsCV(max_iter=1200), 'linear_model.LarsCV')
 validate_score_clf(linear_model.LassoLarsCV(max_iter=1200), 'linear_model.LassoLarsCV')
 validate_score_clf(linear_model.LassoCV(max_iter=1200), 'linear_model.LassoCV')
 validate_score_clf(linear_model.ElasticNetCV(max_iter=1200), 'linear_model.ElasticNetCV')
 validate_score_clf(linear_model.OrthogonalMatchingPursuitCV(), 'linear_model.OrthogonalMatchingPursuitCV')
-validate_score_clf(ensemble.GradientBoostingClassifier(n_estimators=10, verbose=1), 'GradientBoostingClassifier')
-validate_score_clf(ensemble.RandomForestClassifier(max_iter=1200, verbose=1), 'RandomForestClassifier')
+# validate_score_clf(ensemble.GradientBoostingClassifier(n_estimators=10, verbose=1), 'GradientBoostingClassifier')
 # validate_score_clf(linear_model.RidgeClassifierCV(), 'linear_model.RidgeClassifierCV')
 
+validate_score_clf(linear_model.ElasticNetCV(max_iter=1200), 'linear_model.ElasticNetCV')
+
+validate_score_clf(ensemble.RandomForestClassifier(verbose=1), 'RandomForestClassifier')
 clf = linear_model.LogisticRegressionCV(
     max_iter=1200, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced', verbose=1
 )
