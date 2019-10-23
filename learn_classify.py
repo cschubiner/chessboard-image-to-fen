@@ -97,6 +97,7 @@ def validate_score_clf(clf, name):
     if val_score > best_val_score:
       print('New best val score!!')
       best_clf = clf
+      best_val_score = val_score
   except Exception as e:
     print("Exception!", e)
     try:
@@ -107,6 +108,7 @@ def validate_score_clf(clf, name):
       if val_score > best_val_score:
         print('New best val score!!')
         best_clf = clf
+        best_val_score = val_score
     except Exception as e:
       print("Exception 2!", e)
 
