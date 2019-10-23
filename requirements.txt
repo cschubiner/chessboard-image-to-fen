@@ -6,3 +6,5 @@ pandas
 scikit-learn
 Flask
 Flask-Uploads
+tpot
+
