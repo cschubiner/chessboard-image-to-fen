@@ -56,14 +56,14 @@ img_paths = list(df['image_name'])
 label = list(df['label'])
 
 def get_with_hash(obj_to_hash, cache_miss_function):
-  # return cache_miss_function()
   key = str(obj_to_hash)[:8]
   filename = 'saved_objects/obj_' + key
-  if os.path.exists(filename):
+  if False:
+  # if os.path.exists(filename):
       print('Found', filename, 'so using that')
       with open(filename, 'rb') as f:
           return pickle.load(f)
-  print('Could not find', filename, 'so manually calculating it...')
+  print('Did not find', filename, 'so manually calculating it...')
   ret = cache_miss_function()
   with open(filename, 'wb') as f:
     pickle.dump(ret, f)
