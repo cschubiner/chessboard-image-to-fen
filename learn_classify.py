@@ -114,7 +114,10 @@ def validate_score_clf(clf, name):
 
 best_clf = None
 best_val_score = 0.95
-validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1200), 'linear_model.PassiveAggressiveClassifier')
+# validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1200), 'linear_model.PassiveAggressiveClassifier')
+validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1200, fit_intercept=True), 'linear_model.PassiveAggressiveClassifier-fit_intercept')
+validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=2000), 'linear_model.PassiveAggressiveClassifier-2000')
+validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=3000, early_stopping=True), 'linear_model.PassiveAggressiveClassifier-earlyStopping')
 validate_score_clf(linear_model.SGDClassifier(max_iter=1200), 'linear_model.SGDClassifier')
 validate_score_clf(linear_model.LarsCV(max_iter=1200), 'linear_model.LarsCV')
 validate_score_clf(linear_model.LassoLarsCV(max_iter=1200), 'linear_model.LassoLarsCV')
