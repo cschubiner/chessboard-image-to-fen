@@ -70,7 +70,10 @@ def get_with_hash(obj_to_hash, cache_miss_function):
   return ret
 
 
-X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, progress=True))
+# X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, progress=True))
+print('image_features features: vgg19')
+X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, model_name='vgg19', progress=True))
+# X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, augment=True, progress=True))
 y_full = label
 assert len(X_full) == len(img_paths) == len(y_full)
 
@@ -115,24 +118,31 @@ def validate_score_clf(clf, name):
 best_clf = None
 best_val_score = 0.95
 # validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1200), 'linear_model.PassiveAggressiveClassifier')
-validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1200, fit_intercept=True), 'linear_model.PassiveAggressiveClassifier-fit_intercept')
-validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=2000), 'linear_model.PassiveAggressiveClassifier-2000')
-validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=3000, early_stopping=True), 'linear_model.PassiveAggressiveClassifier-earlyStopping')
-validate_score_clf(linear_model.SGDClassifier(max_iter=1200), 'linear_model.SGDClassifier')
-validate_score_clf(linear_model.LarsCV(max_iter=1200), 'linear_model.LarsCV')
-validate_score_clf(linear_model.LassoLarsCV(max_iter=1200), 'linear_model.LassoLarsCV')
-validate_score_clf(linear_model.LassoCV(max_iter=1200), 'linear_model.LassoCV')
-validate_score_clf(linear_model.ElasticNetCV(max_iter=1200), 'linear_model.ElasticNetCV')
+validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=800), 'linear_model.PassiveAggressiveClassifier800')
+validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, loss='squared_hinge'), 'linear_model.PassiveAggressiveClassifier-loss-squared_hinge')
+validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, loss='hinge'), 'linear_model.PassiveAggressiveClassifier-loss-hinge')
+validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, average=True), 'linear_model.PassiveAggressiveClassifier-average')
+validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, fit_intercept=True), 'linear_model.PassiveAggressiveClassifier-fit_intercept')
+validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=3000), 'linear_model.PassiveAggressiveClassifier-2000')
+validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=5000, early_stopping=True), 'linear_model.PassiveAggressiveClassifier-earlyStopping')
+validate_score_clf(linear_model.SGDClassifier(max_iter=800), 'linear_model.SGDClassifier800')
+validate_score_clf(linear_model.SGDClassifier(max_iter=3200), 'linear_model.SGDClassifier3200')
+# validate_score_clf(linear_model.LarsCV(max_iter=1200), 'linear_model.LarsCV')
+# validate_score_clf(linear_model.LassoLarsCV(max_iter=1200), 'linear_model.LassoLarsCV')
+# validate_score_clf(linear_model.LassoCV(max_iter=1200), 'linear_model.LassoCV')
+# validate_score_clf(linear_model.ElasticNetCV(max_iter=1200), 'linear_model.ElasticNetCV')
 validate_score_clf(linear_model.OrthogonalMatchingPursuitCV(), 'linear_model.OrthogonalMatchingPursuitCV')
 validate_score_clf(ensemble.GradientBoostingClassifier(n_estimators=15, verbose=1), 'GradientBoostingClassifier')
+validate_score_clf(linear_model.RidgeClassifierCV(class_weight='balanced'), 'linear_model.RidgeClassifierCV-balanced')
 validate_score_clf(linear_model.RidgeClassifierCV(), 'linear_model.RidgeClassifierCV')
 
-validate_score_clf(ensemble.RandomForestClassifier(verbose=1), 'RandomForestClassifier')
+validate_score_clf(ensemble.RandomForestClassifier(n_estimators=200), 'RandomForestClassifier')
 
 clf = linear_model.LogisticRegressionCV(
     max_iter=2000, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced', verbose=1
 )
 validate_score_clf(clf, 'LogisticRegressionCV maxiter2000')
+
 
 clf = linear_model.LogisticRegressionCV(
     max_iter=900, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced', verbose=1
