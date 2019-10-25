@@ -70,9 +70,12 @@ def get_with_hash(obj_to_hash, cache_miss_function):
   return ret
 
 
+# > [alexnet bninception cafferesnet101 densenet121 densenet161 densenet169 densenet201 fbresnet152 inceptionresnetv2 inceptionv3 inceptionv4 nasnetalarge nasnetamobile pnasnet5large polynet resnet101 resnet152 resnet18 resnet34 resnet50 resnext101_32x4d resnext101_64x4d se_resnet101 se_resnet152 se_resnext101_32x4d se_resnext50_32x4d senet154',  'se_resnet50 squeezenet1_0 squeezenet1_1 vgg11 vgg11_bn vgg13 vgg13_bn vgg16 vgg16_bn vgg19 vgg19_bn]
+
 # X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, progress=True))
-print('image_features features: vgg19')
-X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, model_name='vgg19', progress=True))
+image_features_model_name = 'pnasnet5large'
+print('image_features features:', image_features_model_name)
+X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, model_name=image_features_model_name, progress=True))
 # X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, augment=True, progress=True))
 y_full = label
 assert len(X_full) == len(img_paths) == len(y_full)
@@ -91,6 +94,7 @@ from sklearn import linear_model, ensemble
 def validate_score_clf(clf, name):
   global best_val_score
   global best_clf
+  global best_clf_name
   print('Fitting', name)
   try:
     clf.fit(X_train, y_train)
@@ -109,14 +113,16 @@ def validate_score_clf(clf, name):
       val_score = clf.score(X_val, y_val)
       print(name, '.8 - val score:', val_score)
       if val_score > best_val_score:
-        print('New best val score!!')
+        print('New best val score!! image_feature_model:', image_features_model_name, 'clf:', name)
         best_clf = clf
         best_val_score = val_score
+        best_clf_name = name
     except Exception as e:
       print("Exception 2!", e)
 
+best_clf_name = None
 best_clf = None
-best_val_score = 0.95
+best_val_score = 0.97
 # validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1200), 'linear_model.PassiveAggressiveClassifier')
 validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=800), 'linear_model.PassiveAggressiveClassifier800')
 validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, loss='squared_hinge'), 'linear_model.PassiveAggressiveClassifier-loss-squared_hinge')
@@ -132,7 +138,7 @@ validate_score_clf(linear_model.SGDClassifier(max_iter=3200), 'linear_model.SGDC
 # validate_score_clf(linear_model.LassoCV(max_iter=1200), 'linear_model.LassoCV')
 # validate_score_clf(linear_model.ElasticNetCV(max_iter=1200), 'linear_model.ElasticNetCV')
 validate_score_clf(linear_model.OrthogonalMatchingPursuitCV(), 'linear_model.OrthogonalMatchingPursuitCV')
-validate_score_clf(ensemble.GradientBoostingClassifier(n_estimators=15, verbose=1), 'GradientBoostingClassifier')
+# validate_score_clf(ensemble.GradientBoostingClassifier(n_estimators=15, verbose=1), 'GradientBoostingClassifier')
 validate_score_clf(linear_model.RidgeClassifierCV(class_weight='balanced'), 'linear_model.RidgeClassifierCV-balanced')
 validate_score_clf(linear_model.RidgeClassifierCV(), 'linear_model.RidgeClassifierCV')
 
@@ -152,7 +158,8 @@ validate_score_clf(clf, 'LogisticRegressionCV maxiter900')
 if best_clf:
   print('Fitting best_clf with val score:', best_val_score)
   best_clf.fit(X_full, y_full)
-  dump(best_clf, 'clf.joblib')
+  to_dump_filename = 'clf_' + best_clf_name + '_score_' + str(best_val_score) + '_transfermodel_' + image_features_model_name + '.joblib'
+  dump(best_clf, to_dump_filename)
 
 print('full train score:', clf.score(X_train, y_train))
 print('full val score:', clf.score(X_val, y_val))
