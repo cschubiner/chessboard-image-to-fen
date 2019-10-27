@@ -1,10 +1,12 @@
 image-features==0.1
-torch
-torchvision
 opencv-python
 pandas
-scikit-learn
 Flask
 Flask-Uploads
 tpot
-
+torch==1.2.0
+torchvision==0.4.1
+scikit-learn==0.21.3
+joblib==0.14.0
+opencv-python==4.1.1.26
+pretrainedmodels==0.7.4

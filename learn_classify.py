@@ -74,7 +74,7 @@ def get_with_hash(obj_to_hash, cache_miss_function):
 
 # X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, progress=True))
 # cd ~/repos/chessboard-image-to-fen && source venv/bin/activate && python3 learn_classify.py
-image_features_model_name = 'cafferesnet101'
+image_features_model_name = 'resnext101_32x4d'
 print('image_features features:', image_features_model_name)
 X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, model_name=image_features_model_name, progress=True))
 # X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, augment=True, progress=True))
