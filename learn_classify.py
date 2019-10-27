@@ -74,7 +74,7 @@ def get_with_hash(obj_to_hash, cache_miss_function):
 
 # X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, progress=True))
 # cd ~/repos/chessboard-image-to-fen && source venv/bin/activate && python3 learn_classify.py
-image_features_model_name = 'se_resnext101_32x4d'
+image_features_model_name = 'cafferesnet101'
 print('image_features features:', image_features_model_name)
 X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, model_name=image_features_model_name, progress=True))
 # X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, augment=True, progress=True))
@@ -127,30 +127,31 @@ best_clf_name = None
 best_clf = None
 best_val_score = 0.97
 # validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1200), 'linear_model.PassiveAggressiveClassifier')
-validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=800), 'linear_model.PassiveAggressiveClassifier800')
-validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, loss='squared_hinge'), 'linear_model.PassiveAggressiveClassifier-loss-squared_hinge')
 validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, loss='hinge'), 'linear_model.PassiveAggressiveClassifier-loss-hinge')
-validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, average=True), 'linear_model.PassiveAggressiveClassifier-average')
-validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, fit_intercept=True), 'linear_model.PassiveAggressiveClassifier-fit_intercept')
-validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=3000), 'linear_model.PassiveAggressiveClassifier-2000')
-validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=5000, early_stopping=True), 'linear_model.PassiveAggressiveClassifier-earlyStopping')
-validate_score_clf(linear_model.SGDClassifier(max_iter=800), 'linear_model.SGDClassifier800')
-validate_score_clf(linear_model.SGDClassifier(max_iter=3200), 'linear_model.SGDClassifier3200')
-# validate_score_clf(linear_model.LarsCV(max_iter=1200), 'linear_model.LarsCV')
-# validate_score_clf(linear_model.LassoLarsCV(max_iter=1200), 'linear_model.LassoLarsCV')
-# validate_score_clf(linear_model.LassoCV(max_iter=1200), 'linear_model.LassoCV')
-# validate_score_clf(linear_model.ElasticNetCV(max_iter=1200), 'linear_model.ElasticNetCV')
-validate_score_clf(linear_model.OrthogonalMatchingPursuitCV(), 'linear_model.OrthogonalMatchingPursuitCV')
-# validate_score_clf(ensemble.GradientBoostingClassifier(n_estimators=15, verbose=1), 'GradientBoostingClassifier')
-validate_score_clf(linear_model.RidgeClassifierCV(class_weight='balanced'), 'linear_model.RidgeClassifierCV-balanced')
-validate_score_clf(linear_model.RidgeClassifierCV(), 'linear_model.RidgeClassifierCV')
+
+validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=800), 'linear_model.PassiveAggressiveClassifier800')
+# validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, loss='squared_hinge'), 'linear_model.PassiveAggressiveClassifier-loss-squared_hinge')
+# validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, average=True), 'linear_model.PassiveAggressiveClassifier-average')
+# validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, fit_intercept=True), 'linear_model.PassiveAggressiveClassifier-fit_intercept')
+# validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=3000), 'linear_model.PassiveAggressiveClassifier-2000')
+# validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=5000, early_stopping=True), 'linear_model.PassiveAggressiveClassifier-earlyStopping')
+# validate_score_clf(linear_model.SGDClassifier(max_iter=800), 'linear_model.SGDClassifier800')
+# validate_score_clf(linear_model.SGDClassifier(max_iter=3200), 'linear_model.SGDClassifier3200')
+# # # validate_score_clf(linear_model.LarsCV(max_iter=1200), 'linear_model.LarsCV')
+# # # validate_score_clf(linear_model.LassoLarsCV(max_iter=1200), 'linear_model.LassoLarsCV')
+# # # validate_score_clf(linear_model.LassoCV(max_iter=1200), 'linear_model.LassoCV')
+# # # validate_score_clf(linear_model.ElasticNetCV(max_iter=1200), 'linear_model.ElasticNetCV')
+# validate_score_clf(linear_model.OrthogonalMatchingPursuitCV(), 'linear_model.OrthogonalMatchingPursuitCV')
+# # validate_score_clf(ensemble.GradientBoostingClassifier(n_estimators=15, verbose=1), 'GradientBoostingClassifier')
+# validate_score_clf(linear_model.RidgeClassifierCV(class_weight='balanced'), 'linear_model.RidgeClassifierCV-balanced')
+# validate_score_clf(linear_model.RidgeClassifierCV(), 'linear_model.RidgeClassifierCV')
 
 # validate_score_clf(ensemble.RandomForestClassifier(n_estimators=200), 'RandomForestClassifier')
 
-clf = linear_model.LogisticRegressionCV(
-    max_iter=2000, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced', verbose=1
-)
-validate_score_clf(clf, 'LogisticRegressionCV maxiter2000')
+# clf = linear_model.LogisticRegressionCV(
+#     max_iter=2000, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced', verbose=1
+# )
+# validate_score_clf(clf, 'LogisticRegressionCV maxiter2000')
 
 
 clf = linear_model.LogisticRegressionCV(
@@ -161,7 +162,10 @@ validate_score_clf(clf, 'LogisticRegressionCV maxiter900')
 if best_clf:
   print('Fitting best_clf with val score:', best_val_score)
   best_clf.fit(X_full, y_full)
-  to_dump_filename = 'clf_' + best_clf_name + '_score_' + str(best_val_score) + '_transfermodel_' + image_features_model_name + '.joblib'
+  try:
+    to_dump_filename = 'clf_' + best_clf_name + '_score_' + str(best_val_score) + '_transfermodel_' + image_features_model_name + '.joblib'
+  except Exception:
+    to_dump_filename = 'clf_dump_backupname.joblib'
   dump(best_clf, to_dump_filename)
 
 print('full train score:', clf.score(X_train, y_train))
@@ -173,4 +177,3 @@ print('full full score:', clf.score(X_full, y_full))
 # tpot_classifier = TPOTClassifier(generations=9, population_size=20, config_dict='TPOT light', verbosity=2)
 # validate_score_clf(tpot_classifier, 'TPOTClassifier')
 # tpot_classifier.export('tpot_exported_pipeline.py')
-
