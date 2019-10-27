@@ -73,7 +73,8 @@ def get_with_hash(obj_to_hash, cache_miss_function):
 # > [alexnet bninception cafferesnet101 densenet121 densenet161 densenet169 densenet201 fbresnet152 inceptionresnetv2 inceptionv3 inceptionv4 nasnetalarge nasnetamobile pnasnet5large polynet resnet101 resnet152 resnet18 resnet34 resnet50 resnext101_32x4d resnext101_64x4d se_resnet101 se_resnet152 se_resnext101_32x4d se_resnext50_32x4d senet154',  'se_resnet50 squeezenet1_0 squeezenet1_1 vgg11 vgg11_bn vgg13 vgg13_bn vgg16 vgg16_bn vgg19 vgg19_bn]
 
 # X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, progress=True))
-image_features_model_name = 'pnasnet5large'
+# cd ~/repos/chessboard-image-to-fen && source venv/bin/activate && python3 learn_classify.py
+image_features_model_name = 'se_resnext101_32x4d'
 print('image_features features:', image_features_model_name)
 X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, model_name=image_features_model_name, progress=True))
 # X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, augment=True, progress=True))
@@ -95,16 +96,18 @@ def validate_score_clf(clf, name):
   global best_val_score
   global best_clf
   global best_clf_name
-  print('Fitting', name)
+  global image_features_model_name
+  print('Fitting', name, 'with', image_features_model_name)
   try:
     clf.fit(X_train, y_train)
     print(name, '.8 - train score:', clf.score(X_train, y_train))
     val_score = clf.score(X_val, y_val)
     print(name, '.8 - val score:', val_score)
     if val_score > best_val_score:
-      print('New best val score!!')
+      print('New best val score!! image_feature_model:', image_features_model_name, 'clf:', name)
       best_clf = clf
       best_val_score = val_score
+      best_clf_name = name
   except Exception as e:
     print("Exception!", e)
     try:
@@ -142,7 +145,7 @@ validate_score_clf(linear_model.OrthogonalMatchingPursuitCV(), 'linear_model.Ort
 validate_score_clf(linear_model.RidgeClassifierCV(class_weight='balanced'), 'linear_model.RidgeClassifierCV-balanced')
 validate_score_clf(linear_model.RidgeClassifierCV(), 'linear_model.RidgeClassifierCV')
 
-validate_score_clf(ensemble.RandomForestClassifier(n_estimators=200), 'RandomForestClassifier')
+# validate_score_clf(ensemble.RandomForestClassifier(n_estimators=200), 'RandomForestClassifier')
 
 clf = linear_model.LogisticRegressionCV(
     max_iter=2000, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced', verbose=1
@@ -165,9 +168,9 @@ print('full train score:', clf.score(X_train, y_train))
 print('full val score:', clf.score(X_val, y_val))
 print('full full score:', clf.score(X_full, y_full))
 
-from tpot import TPOTClassifier
-tpot_classifier = TPOTClassifier(generations=5, population_size=20, cv=5, random_state=42, verbosity=2)
+# from tpot import TPOTClassifier
+# tpot_classifier = TPOTClassifier(generations=5, population_size=20, cv=5, random_state=42, verbosity=2)
 # tpot_classifier = TPOTClassifier(generations=9, population_size=20, config_dict='TPOT light', verbosity=2)
-validate_score_clf(tpot_classifier, 'TPOTClassifier')
-tpot_classifier.export('tpot_exported_pipeline.py')
+# validate_score_clf(tpot_classifier, 'TPOTClassifier')
+# tpot_classifier.export('tpot_exported_pipeline.py')
 
