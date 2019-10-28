@@ -70,12 +70,13 @@ def get_with_hash(obj_to_hash, cache_miss_function):
   return ret
 
 
-# > [alexnet bninception cafferesnet101 densenet121 densenet161 densenet169 densenet201 fbresnet152 inceptionresnetv2 inceptionv3 inceptionv4 nasnetalarge nasnetamobile pnasnet5large polynet resnet101 resnet152 resnet18 resnet34 resnet50 resnext101_32x4d resnext101_64x4d se_resnet101 se_resnet152 se_resnext101_32x4d se_resnext50_32x4d ',  'se_resnet50 squeezenet1_0 squeezenet1_1 vgg11 vgg11_bn vgg13 vgg13_bn vgg16 vgg16_bn  vgg19_bn]
+# > [alexnet bninception cafferesnet101 densenet121 densenet161 densenet169 densenet201 fbresnet152 inceptionresnetv2 inceptionv3  nasnetamobile pnasnet5large  resnet101 resnet152 resnet18 resnet34 resnet50 resnext101_32x4d  se_resnet101   se_resnext50_32x4d ',  'se_resnet50 squeezenet1_0  vgg11 vgg11_bn vgg13 vgg13_bn vgg16 vgg16_bn  ]
 
 # X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, progress=True))
 # cd ~/repos/chessboard-image-to-fen && source venv/bin/activate && python3 learn_classify.py
-# resnext101_64x4d alexnet cafferesnet101 inceptionresnetv2 inceptionv4 pnasnet5large resnet101 se_resnext101_32x4d squeezenet1_1 vgg16 vgg19_bn se_resnet152 senet154 vgg19
-image_features_model_name = 'vgg19'
+# ALREADY DONE:
+# resnext101_64x4d alexnet cafferesnet101 inceptionresnetv2 inceptionv4 pnasnet5large resnet101 se_resnext101_32x4d squeezenet1_1 vgg16 vgg19_bn se_resnet152 senet154 vgg19 nasnetalarge polynet inceptionv3
+image_features_model_name = 'inceptionv3'
 print('image_features features:', image_features_model_name)
 X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, model_name=image_features_model_name, progress=True))
 # X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, augment=True, progress=True))
@@ -162,12 +163,13 @@ clf = linear_model.LogisticRegressionCV(
 validate_score_clf(clf, 'LogisticRegressionCV maxiter900')
 
 if best_clf:
-  print('Fitting best_clf with val score:', best_val_score)
-  best_clf.fit(X_full, y_full)
   try:
     to_dump_filename = 'clf_' + best_clf_name + '_score_' + str(best_val_score) + '_transfermodel_' + image_features_model_name + '.joblib'
   except Exception:
     to_dump_filename = 'clf_dump_backupname.joblib'
+  print('Fitting best_clf with val score:', best_val_score, 'to_dump_filename:', to_dump_filename)
+
+  best_clf.fit(X_full, y_full)
   dump(best_clf, to_dump_filename)
 
 print('full train score:', clf.score(X_train, y_train))
