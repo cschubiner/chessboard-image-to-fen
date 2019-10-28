@@ -70,11 +70,12 @@ def get_with_hash(obj_to_hash, cache_miss_function):
   return ret
 
 
-# > [alexnet bninception cafferesnet101 densenet121 densenet161 densenet169 densenet201 fbresnet152 inceptionresnetv2 inceptionv3 inceptionv4 nasnetalarge nasnetamobile pnasnet5large polynet resnet101 resnet152 resnet18 resnet34 resnet50 resnext101_32x4d resnext101_64x4d se_resnet101 se_resnet152 se_resnext101_32x4d se_resnext50_32x4d senet154',  'se_resnet50 squeezenet1_0 squeezenet1_1 vgg11 vgg11_bn vgg13 vgg13_bn vgg16 vgg16_bn vgg19 vgg19_bn]
+# > [alexnet bninception cafferesnet101 densenet121 densenet161 densenet169 densenet201 fbresnet152 inceptionresnetv2 inceptionv3 inceptionv4 nasnetalarge nasnetamobile pnasnet5large polynet resnet101 resnet152 resnet18 resnet34 resnet50 resnext101_32x4d resnext101_64x4d se_resnet101 se_resnet152 se_resnext101_32x4d se_resnext50_32x4d ',  'se_resnet50 squeezenet1_0 squeezenet1_1 vgg11 vgg11_bn vgg13 vgg13_bn vgg16 vgg16_bn  vgg19_bn]
 
 # X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, progress=True))
 # cd ~/repos/chessboard-image-to-fen && source venv/bin/activate && python3 learn_classify.py
-image_features_model_name = 'resnext101_32x4d'
+# resnext101_64x4d alexnet cafferesnet101 inceptionresnetv2 inceptionv4 pnasnet5large resnet101 se_resnext101_32x4d squeezenet1_1 vgg16 vgg19_bn se_resnet152 senet154 vgg19
+image_features_model_name = 'vgg19'
 print('image_features features:', image_features_model_name)
 X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, model_name=image_features_model_name, progress=True))
 # X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, augment=True, progress=True))
@@ -131,11 +132,12 @@ validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, loss=
 
 validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=800), 'linear_model.PassiveAggressiveClassifier800')
 # validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, loss='squared_hinge'), 'linear_model.PassiveAggressiveClassifier-loss-squared_hinge')
-# validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, average=True), 'linear_model.PassiveAggressiveClassifier-average')
-# validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, fit_intercept=True), 'linear_model.PassiveAggressiveClassifier-fit_intercept')
+validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, average=True), 'linear_model.PassiveAggressiveClassifier-average')
+validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, fit_intercept=True), 'linear_model.PassiveAggressiveClassifier-fit_intercept')
 # validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=3000), 'linear_model.PassiveAggressiveClassifier-2000')
 # validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=5000, early_stopping=True), 'linear_model.PassiveAggressiveClassifier-earlyStopping')
 # validate_score_clf(linear_model.SGDClassifier(max_iter=800), 'linear_model.SGDClassifier800')
+validate_score_clf(linear_model.SGDClassifier(max_iter=1200), 'linear_model.SGDClassifier1200')
 # validate_score_clf(linear_model.SGDClassifier(max_iter=3200), 'linear_model.SGDClassifier3200')
 # # # validate_score_clf(linear_model.LarsCV(max_iter=1200), 'linear_model.LarsCV')
 # # # validate_score_clf(linear_model.LassoLarsCV(max_iter=1200), 'linear_model.LassoLarsCV')
@@ -148,10 +150,10 @@ validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=800), 'line
 
 # validate_score_clf(ensemble.RandomForestClassifier(n_estimators=200), 'RandomForestClassifier')
 
-# clf = linear_model.LogisticRegressionCV(
-#     max_iter=2000, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced', verbose=1
-# )
-# validate_score_clf(clf, 'LogisticRegressionCV maxiter2000')
+clf = linear_model.LogisticRegressionCV(
+    max_iter=1200, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced', verbose=1
+)
+validate_score_clf(clf, 'LogisticRegressionCV maxiter1200')
 
 
 clf = linear_model.LogisticRegressionCV(
