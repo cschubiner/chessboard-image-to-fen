@@ -77,9 +77,8 @@ def get_with_hash(obj_to_hash, cache_miss_function):
 # ALREADY DONE:
 # resnext101_64x4d alexnet cafferesnet101 inceptionresnetv2 inceptionv4 pnasnet5large resnet101 se_resnext101_32x4d squeezenet1_1 vgg16 vgg19_bn se_resnet152 senet154 vgg19 nasnetalarge polynet inceptionv3 resnet18 fbresnet152 resnext101_32x4d se_resnet50 se_resnext50_32x4d resnet101 resnet152 bninception densenet121 densenet201 nasnetamobile se_resnet101 resnet50 resnet18 resnet34 squeezenet1_0 densenet161 vgg11 densenet169 vgg13 vgg13_bn vgg16_bn
 # GOOD ONES
-# resnext101_64x4d cafferesnet101 se_resnet152
-# se_resnet50 polynet se_resnet101
-image_features_model_name = 'se_resnet152'
+# resnext101_64x4d cafferesnet101 se_resnet152 se_resnet50 polynet se_resnet101
+image_features_model_name = 'polynet'
 print('image_features features:', image_features_model_name)
 X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, model_name=image_features_model_name, progress=True))
 # X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, augment=True, progress=True))
@@ -131,9 +130,9 @@ def validate_score_clf(clf, name):
 best_clf_name = None
 best_clf = None
 best_val_score = 0.97
-# validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1200), 'linear_model.PassiveAggressiveClassifier')
 validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1100, loss='hinge'), 'linear_model.PassiveAggressiveClassifier-loss-hinge')
 validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=700, loss='hinge'), 'linear_model.PassiveAggressiveClassifier-loss-hinge-700')
+validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=700, loss='hinge', class_weight='balanced'), 'linear_model.PassiveAggressiveClassifier-loss-hinge-700-balanced')
 validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=1850, loss='hinge'), 'linear_model.PassiveAggressiveClassifier-loss-hinge-1850')
 
 validate_score_clf(linear_model.PassiveAggressiveClassifier(max_iter=800), 'linear_model.PassiveAggressiveClassifier800')
@@ -157,26 +156,26 @@ validate_score_clf(linear_model.RidgeClassifierCV(), 'linear_model.RidgeClassifi
 # validate_score_clf(ensemble.RandomForestClassifier(n_estimators=200), 'RandomForestClassifier')
 
 clf = linear_model.LogisticRegressionCV(
-    max_iter=1200, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced', verbose=1
+    max_iter=1200, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced'
 )
 validate_score_clf(clf, 'LogisticRegressionCV_maxiter1200')
 
 
 clf = linear_model.LogisticRegressionCV(
-    max_iter=550, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced', verbose=1
+    max_iter=550, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced'
 )
 validate_score_clf(clf, 'LogisticRegressionCV_maxiter550')
 
 clf = linear_model.LogisticRegressionCV(
-    max_iter=1000, Cs=np.geomspace(1e-1, 1e-7, 15), verbose=1
+    max_iter=1000, Cs=np.geomspace(1e-1, 1e-7, 15)
 )
 validate_score_clf(clf, 'LogisticRegressionCV_imbalanced')
-validate_score_clf(linear_model.LogisticRegressionCV(max_iter=900, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced', verbose=1), 'LogisticRegressionCV_maxiter900')
-validate_score_clf(linear_model.LogisticRegressionCV(solver='sag', max_iter=1050, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced', verbose=1), 'LogisticRegressionCV_solver_sag')
-validate_score_clf(linear_model.LogisticRegressionCV(solver='newton-cg', max_iter=1050, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced', verbose=1), 'LogisticRegressionCV_solver_newton-cg')
-validate_score_clf(linear_model.LogisticRegressionCV(solver='liblinear', penalty='l1', max_iter=1050, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced', verbose=1), 'LogisticRegressionCV_solver_liblinear')
-validate_score_clf(linear_model.LogisticRegressionCV(solver='saga', penalty='l1', max_iter=1050, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced', verbose=1), 'LogisticRegressionCV_solver_saga')
-validate_score_clf(linear_model.LogisticRegressionCV(solver='saga', penalty='elasticnet', max_iter=1050, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced', verbose=1), 'LogisticRegressionCV_solver_saga_elasticnet')
+validate_score_clf(linear_model.LogisticRegressionCV(max_iter=900, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced'), 'LogisticRegressionCV_maxiter900')
+validate_score_clf(linear_model.LogisticRegressionCV(solver='sag', max_iter=1050, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced'), 'LogisticRegressionCV_solver_sag')
+validate_score_clf(linear_model.LogisticRegressionCV(solver='newton-cg', max_iter=1050, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced'), 'LogisticRegressionCV_solver_newton-cg')
+validate_score_clf(linear_model.LogisticRegressionCV(solver='liblinear', penalty='l1', max_iter=1050, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced'), 'LogisticRegressionCV_solver_liblinear')
+validate_score_clf(linear_model.LogisticRegressionCV(solver='saga', penalty='l1', max_iter=1050, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced'), 'LogisticRegressionCV_solver_saga')
+validate_score_clf(linear_model.LogisticRegressionCV(solver='saga', penalty='elasticnet', max_iter=1050, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced'), 'LogisticRegressionCV_solver_saga_elasticnet')
 
 if best_clf:
   try:
