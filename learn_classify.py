@@ -157,21 +157,19 @@ validate_score_clf(linear_model.RidgeClassifierCV(), 'linear_model.RidgeClassifi
 # validate_score_clf(ensemble.RandomForestClassifier(n_estimators=200), 'RandomForestClassifier')
 
 clf = linear_model.LogisticRegressionCV(
+    max_iter=550, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced'
+)
+validate_score_clf(clf, 'LogisticRegressionCV_maxiter550')
+
+validate_score_clf(linear_model.LogisticRegressionCV(max_iter=900, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced'), 'LogisticRegressionCV_maxiter900')
+validate_score_clf(linear_model.LogisticRegressionCV(max_iter=1000, Cs=np.geomspace(1e-1, 1e-7, 15)), 'LogisticRegressionCV_imbalanced')
+
+clf = linear_model.LogisticRegressionCV(
     max_iter=1200, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced'
 )
 validate_score_clf(clf, 'LogisticRegressionCV_maxiter1200')
 
 
-clf = linear_model.LogisticRegressionCV(
-    max_iter=550, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced'
-)
-validate_score_clf(clf, 'LogisticRegressionCV_maxiter550')
-
-clf = linear_model.LogisticRegressionCV(
-    max_iter=1000, Cs=np.geomspace(1e-1, 1e-7, 15)
-)
-validate_score_clf(clf, 'LogisticRegressionCV_imbalanced')
-validate_score_clf(linear_model.LogisticRegressionCV(max_iter=900, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced'), 'LogisticRegressionCV_maxiter900')
 validate_score_clf(linear_model.LogisticRegressionCV(solver='sag', max_iter=1050, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced'), 'LogisticRegressionCV_solver_sag')
 validate_score_clf(linear_model.LogisticRegressionCV(solver='newton-cg', max_iter=1050, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced'), 'LogisticRegressionCV_solver_newton-cg')
 validate_score_clf(linear_model.LogisticRegressionCV(solver='liblinear', penalty='l1', max_iter=1050, Cs=np.geomspace(1e-1, 1e-7, 15), class_weight='balanced'), 'LogisticRegressionCV_solver_liblinear')
