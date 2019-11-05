@@ -78,7 +78,7 @@ def get_with_hash(obj_to_hash, cache_miss_function):
 # resnext101_64x4d alexnet cafferesnet101 inceptionresnetv2 inceptionv4 pnasnet5large resnet101 se_resnext101_32x4d squeezenet1_1 vgg16 vgg19_bn se_resnet152 senet154 vgg19 nasnetalarge polynet inceptionv3 resnet18 fbresnet152 resnext101_32x4d se_resnet50 se_resnext50_32x4d resnet101 resnet152 bninception densenet121 densenet201 nasnetamobile se_resnet101 resnet50 resnet18 resnet34 squeezenet1_0 densenet161 vgg11 densenet169 vgg13 vgg13_bn vgg16_bn
 # GOOD ONES
 # resnext101_64x4d cafferesnet101 se_resnet152 se_resnet50 polynet se_resnet101
-image_features_model_name = 'resnet152'
+image_features_model_name = 'cafferesnet101'
 print('image_features features:', image_features_model_name)
 X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, model_name=image_features_model_name, progress=True))
 # X_full = get_with_hash(len(img_paths), partial(image_features, img_paths, augment=True, progress=True))
@@ -178,7 +178,7 @@ validate_score_clf(linear_model.LogisticRegressionCV(solver='saga', l1_ratios=[0
 
 if best_clf:
   try:
-    to_dump_filename = 'clf_' + best_clf_name + '_score_' + str(best_val_score) + '_transfermodel_' + image_features_model_name + '.joblib'
+    to_dump_filename = 'clf_' + best_clf_name + '_numimages_' + str(len(img_paths)) + '_score_' + str(best_val_score) + '_transfermodel_' + image_features_model_name + '.joblib'
   except Exception:
     to_dump_filename = 'clf_dump_backupname.joblib'
   print('Fitting best_clf with val score:', best_val_score, 'to_dump_filename:', to_dump_filename)
