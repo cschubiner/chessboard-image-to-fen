@@ -27,7 +27,7 @@ python3 file_checker.py
   run ./detect_mass.sh
   delete all malformed chess boards in output folder
   move files that exist in chessboard-image-to-fen/clayboards_out/ to chessboard-image-to-fen/clayboards_out_processed/
-  move files from neural-chessboard output folder to chessboard-image-to-fen/clayboards_out/
+  move files from neural-chessboard/clayboards_out output folder to chessboard-image-to-fen/clayboards_out/
   label all images in labeled_boards.py
   run create_training_data_from_boards.py
   ensure new images exist in training folders and validate images there to ensure they're good
